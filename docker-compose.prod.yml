@@ -1,0 +1,16 @@
+services:
+  muuve_nestjs_api_prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '4000:4000'
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+    volumes:
+      # Mapping local src directory to the container's src directory.
+      # Changes in the local src folder will be reflected inside the container in real time.
+      # The local directory './src' is mapped to '/usr/src/app/src' in the container.
+      # This setup allows you to work on your code locally and see changes immediately without rebuilding the container.
+      - ./src:/usr/src/app/src

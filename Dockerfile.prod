@@ -1,0 +1,22 @@
+# Use an official Node.js runtime as a parent image
+FROM node:20
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# We have specified the files we don't want to copy in the .dockerignore file.
+COPY . .
+
+# Install dependencies
+RUN npm install
+RUN npm run build
+RUN rm -rf ./src
+
+
+# Copy the rest of the application files
+
+# Expose the port the app runs on
+EXPOSE 4000
+
+# Command to run the application
+CMD ["npm", "run", "start:prod"]
