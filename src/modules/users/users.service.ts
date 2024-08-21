@@ -20,7 +20,7 @@ export class UsersService {
     },
   ];
   findAll() {
-    return { message: 'Login successful' };
+    return this.dummyData;
   }
   findOneByEmail(email: string) {
     const user = this.dummyData.find((user) => user.email === email);
