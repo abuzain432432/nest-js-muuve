@@ -7,9 +7,15 @@ import {
 } from '@nestjs/common';
 import { Observable, throwError, TimeoutError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
-
+/**
+ * IF you want to customize the timeoutTime period pass an instance
+ *
+ * Instead of class
+ *
+ *  **/
 @Injectable()
 export class TimeoutInterceptor implements NestInterceptor {
+  constructor(private timeoutTimeInSeconds: number = 5) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const className = context.getClass().name;
@@ -18,7 +24,7 @@ export class TimeoutInterceptor implements NestInterceptor {
     const endpoint = request.url;
 
     return next.handle().pipe(
-      timeout(5000),
+      timeout(this.timeoutTimeInSeconds * 1000),
       catchError((err) => {
         if (err instanceof TimeoutError) {
           console.log(

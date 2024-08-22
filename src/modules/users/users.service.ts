@@ -19,7 +19,8 @@ export class UsersService {
       id: 'zyz',
     },
   ];
-  findAll() {
+  async findAll() {
+    await new Promise((res) => setTimeout(res, 5000));
     return this.dummyData;
   }
   findOneByEmail(email: string) {
