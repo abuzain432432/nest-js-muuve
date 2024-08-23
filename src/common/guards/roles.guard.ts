@@ -8,8 +8,8 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   private matchRoles(roles: RolesEnum[], userRole: RolesEnum) {
-    roles.some((rl) => rl === userRole);
-    return true;
+    return roles.some((rl) => rl === userRole);
+    // return true;
   }
   canActivate(context: ExecutionContext): boolean {
     // TODO update this code to check for the roles assigned on both class level and method level

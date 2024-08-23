@@ -8,7 +8,7 @@ type User = {
   lastName: string;
 };
 @Injectable()
-export class UsersService {
+export class PropertyService {
   private dummyData: User[] = [
     {
       password: 'password',

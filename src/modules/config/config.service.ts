@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NextConfigService } from '@nestjs/config';
-import { EnvironmentVariablesType } from 'src/common/config/envConfig';
+import { EnvironmentVariablesType } from 'src/common/schemas/envs.schema';
 
 @Injectable()
 export class ConfigService {
@@ -14,5 +14,15 @@ export class ConfigService {
     return this.nestConfigService.get(key, {
       infer: true,
     }) as EnvironmentVariablesType[K];
+  }
+
+  getJwtCookieExpiryTime(): Date {
+    const tokenExpiresInDays = Number(this.get('JWT_COOKIE_EXPIRES_IN'));
+    return new Date(Date.now() + tokenExpiresInDays * 24 * 60 * 60 * 1000);
+  }
+
+  getJwtExpiryString(): string {
+    const tokenExpiresInDays = Number(this.get('JWT_COOKIE_EXPIRES_IN'));
+    return `${tokenExpiresInDays}d`;
   }
 }
