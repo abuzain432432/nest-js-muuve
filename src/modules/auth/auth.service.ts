@@ -35,7 +35,7 @@ export class AuthService {
         "We couldn't find an account with the email address you provided.",
       );
     }
-    const { password, ...userDetails } = user;
+    const { password, ...userDetails } = user.toObject();
     const isPasswordMatched = await user.correctPassword(
       data.password,
       password,
@@ -51,6 +51,6 @@ export class AuthService {
     const newlyCreatedUser = await this.userService.create(data as any);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userDetails } = newlyCreatedUser.toObject();
-    return { message: 'Signup successful', data: userDetails };
+    return { message: 'Signup successful' };
   }
 }

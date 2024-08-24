@@ -1,9 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Property } from 'src/modules/property/schemas/property.schema';
-import bcrypt from 'bcryptjs';
-import { UserSchemaMiddleware } from '../schemas-middleware/user.schema-middleware';
-import { UserMethodsType } from '../schemas-methods/user.schema-methods';
+import { userSchemaMiddleware } from '../schemas-middleware/user.schema-middleware';
+import {
+  addUserMethods,
+  UserMethodsType,
+} from '../schemas-methods/user.schema-methods';
 
 export type UserDocument = HydratedDocument<User> & UserMethodsType;
 
@@ -11,6 +13,9 @@ export type UserDocument = HydratedDocument<User> & UserMethodsType;
 export class User {
   @Prop({ isRequired: true })
   firstName: string;
+
+  @Prop({ isRequired: true, unique: true })
+  username: string;
 
   @Prop({ isRequired: true })
   password: string;
@@ -40,11 +45,5 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.methods.correctPassword = async function (
-  candidatePassword,
-  userPassword,
-) {
-  return await bcrypt.compare(`${candidatePassword}`, userPassword);
-};
-UserSchemaMiddleware(UserSchema);
+userSchemaMiddleware(UserSchema);
+addUserMethods(UserSchema);

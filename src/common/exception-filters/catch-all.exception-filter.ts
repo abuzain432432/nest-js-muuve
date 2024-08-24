@@ -13,20 +13,23 @@ export class CatchAllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
   // NOTE there is an error property in the exception object that is not being used
   catch(exception: any, host: ArgumentsHost): void {
-    // In certain situations `httpAdapter` might not be available in the
-    // constructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
     const path = httpAdapter.getRequestUrl(ctx.getRequest());
     let message: string;
-    if (exception instanceof HttpException) {
+    console.log('***********************************');
+    console.log(exception);
+    console.log('***********************************');
+
+    if (exception?.code === 11000) {
+      const [key, value] = Object.entries(exception.errorResponse.keyValue)[0];
+      message = `Duplicate ${key} (${value})`;
+    } else if (exception instanceof HttpException) {
       const response = exception.getResponse();
       message =
         typeof response === 'string'
           ? response
           : (response as any).message || exception.message;
-    } else if (exception instanceof Error) {
-      message = exception.message;
     } else {
       message = 'Internal server error';
     }

@@ -1,36 +1,34 @@
 import { IsEmail, IsString, MinLength, IsNotEmpty } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
-import { String } from 'src/common/decorators/string.decorator';
+import { Transform } from 'class-transformer';
 
 export class SignupDto {
-  @String({
-    minLength: 3,
-    isStringMessage: 'First Name must be a string',
-    isNotEmptyMessage: 'First name is required',
-    minLengthMessage: 'First name must be at least 3 characters long',
-  })
+  @MinLength(3, { message: 'First name must be at least 3 characters long' })
+  @IsString({ message: 'First Name must be a string' })
+  @IsNotEmpty({ message: 'First name is required' })
+  @Transform(({ value }) => value?.trim())
   firstName: string;
 
-  @String({
-    minLength: 3,
-    isStringMessage: 'Last Name must be a string',
-    isNotEmptyMessage: 'Last name is required',
-    minLengthMessage: 'Last name must be at least 3 characters long',
-  })
+  @MinLength(3, { message: 'Last name must be at least 3 characters long' })
+  @IsString({ message: 'Last Name must be a string' })
+  @IsNotEmpty({ message: 'Last name is required' })
+  @Transform(({ value }) => value?.trim())
   lastName: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Email must be a valid email address' })
   @IsNotEmpty({ message: 'Email is required' })
   email: string;
 
   @IsString({ message: 'Password must be a string' })
-  @MinLength(8)
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
   @IsNotEmpty({ message: 'Password is required' })
   password: string;
 
   @Match('password', { message: 'Password and Confirm password do not match' })
   @IsString({ message: 'Password Confirm must be a string' })
-  @MinLength(8)
+  @MinLength(8, {
+    message: 'Password Confirm must be at least 8 characters long',
+  })
   @IsNotEmpty({ message: 'Password Confirm is required' })
   passwordConfirm: string;
 }
