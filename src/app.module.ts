@@ -7,6 +7,7 @@ import { ExceptionsModule } from './modules/exceptions/exceptions.module';
 import { DBModule } from './modules/db/db.module';
 import { ConfigModule } from './modules/config/config.module';
 import { PropertyModule } from './modules/property/property.module';
+import { WSModule } from './modules/ws/ws.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PropertyModule } from './modules/property/property.module';
     UsersModule,
     PropertyModule,
     ExceptionsModule,
+    WSModule,
   ],
 })
 export class AppModule implements NestModule {

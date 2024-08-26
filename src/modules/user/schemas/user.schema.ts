@@ -6,6 +6,7 @@ import {
   addUserMethods,
   UserMethodsType,
 } from '../schemas-methods/user.schema-methods';
+import { RolesEnum } from 'src/common/enums/roles.enum';
 
 export type UserDocument = HydratedDocument<User> & UserMethodsType;
 
@@ -13,9 +14,6 @@ export type UserDocument = HydratedDocument<User> & UserMethodsType;
 export class User {
   @Prop({ isRequired: true })
   firstName: string;
-
-  @Prop({ isRequired: true, unique: true })
-  username: string;
 
   @Prop({ isRequired: true })
   password: string;
@@ -42,6 +40,9 @@ export class User {
     default: [],
   })
   properties: Property[];
+
+  @Prop({ type: String, enum: RolesEnum, required: true })
+  role: RolesEnum;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -43,7 +43,7 @@ export class AuthService {
     if (!isPasswordMatched) {
       throw new UnauthorizedException('Invalid password');
     }
-    const token = await this.jwtService.signAsync({ sub: userDetails.id });
+    const token = await this.jwtService.signAsync({ sub: userDetails._id });
     this.setAuthCookie(res, token);
     return { message: 'Login successful', data: userDetails };
   }

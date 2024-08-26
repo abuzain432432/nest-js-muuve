@@ -1,6 +1,13 @@
-import { IsEmail, IsString, MinLength, IsNotEmpty } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  MinLength,
+  IsNotEmpty,
+  IsEnum,
+} from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 import { Transform } from 'class-transformer';
+import { RolesEnum } from 'src/common/enums/roles.enum';
 
 export class SignupDto {
   @MinLength(3, { message: 'First name must be at least 3 characters long' })
@@ -31,4 +38,8 @@ export class SignupDto {
   })
   @IsNotEmpty({ message: 'Password Confirm is required' })
   passwordConfirm: string;
+
+  @IsEnum(RolesEnum, { message: 'Role must be a valid role' })
+  @IsNotEmpty({ message: 'Role is required' })
+  role: RolesEnum;
 }
