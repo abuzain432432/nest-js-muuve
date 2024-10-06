@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from 'src/modules/config/config.service';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Global()

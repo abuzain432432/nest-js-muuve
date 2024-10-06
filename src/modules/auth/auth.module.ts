@@ -1,21 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UsersModule } from '../user/user.module';
+import { UsersModule } from 'src/modules/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '../config/config.service';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { APP_GUARD } from '@nestjs/core';
+import { ConfigService } from 'src/modules/config/config.service';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { GoogleStrategy } from './strategies/google-strategy';
+import { EmailNotificationModule } from 'src/modules/email-notification/email-notification.module';
 
 @Module({
+  exports: [AuthService],
   controllers: [AuthController],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-    AuthService,
-  ],
+  providers: [GoogleStrategy, AuthService, LocalStrategy, JwtStrategy],
   imports: [
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -28,6 +25,7 @@ import { APP_GUARD } from '@nestjs/core';
       global: true,
     }),
     UsersModule,
+    EmailNotificationModule,
   ],
 })
 export class AuthModule {}

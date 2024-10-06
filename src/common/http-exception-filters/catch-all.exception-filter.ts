@@ -17,11 +17,15 @@ export class CatchAllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const path = httpAdapter.getRequestUrl(ctx.getRequest());
     let message: string;
-    console.log('***********************************');
-    console.log(exception);
-    console.log('***********************************');
 
-    if (exception?.code === 11000) {
+    console.log('_____________________________');
+    console.log(exception);
+    const isMongooseValidationError = exception.errors;
+    if (isMongooseValidationError) {
+      message = Object.values(exception.errors)
+        .map((error: any) => error.message)
+        .join(', ');
+    } else if (exception?.code === 11000) {
       const [key, value] = Object.entries(exception.errorResponse.keyValue)[0];
       message = `Duplicate ${key} (${value})`;
     } else if (exception instanceof HttpException) {

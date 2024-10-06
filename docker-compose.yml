@@ -4,13 +4,22 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '3000:3000' # For your main application
+      - '3001:3001' # For WebSocket server
     environment:
       - NODE_ENV=development
       - PORT=3000
+      - REDIS_URL=redis://redis:6379 # Add Redis connection URL
     volumes:
       # Mapping local src directory to the container's src directory.
       # Changes in the local src folder will be reflected inside the container in real time.
       # The local directory './src' is mapped to '/usr/src/app/src' in the container.
       # This setup allows you to work on your code locally and see changes immediately without rebuilding the container.
       - ./src:/usr/src/app/src
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'

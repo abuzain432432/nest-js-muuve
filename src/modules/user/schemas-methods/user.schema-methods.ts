@@ -1,6 +1,5 @@
 import { Schema } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
-
 export function addUserMethods(schema: Schema) {
   schema.methods.correctPassword = async function (
     candidatePassword: string,

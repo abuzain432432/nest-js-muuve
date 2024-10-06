@@ -1,28 +1,124 @@
 import {
+  MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  MessageBody,
-  WsResponse,
   OnGatewayInit,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  ConnectedSocket,
 } from '@nestjs/websockets';
-import { Server, Namespace } from 'socket.io';
-import { MESSAGE_WS_NAMESPACE } from 'src/common/constants/index.constants';
-
-@WebSocketGateway(3001, { namespace: MESSAGE_WS_NAMESPACE })
-class WSGateway implements OnGatewayInit {
+import { Server, Socket } from 'socket.io';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { CreateMessageDto } from 'src/modules/message/dtos/create.dto';
+import { AuthenticatedSocket } from './types/socket-io.types';
+import { WSService } from './ws.service';
+import { RedisIoAdapter } from './adapters/redis.adapter';
+import { AuthWsMiddleware } from './middlewares/ws-auth.middleware';
+import {
+  UsePipes,
+  ValidationPipe,
+  UseFilters,
+  BadRequestException,
+} from '@nestjs/common';
+import { WsCatchAllExceptionsFilter } from 'src/common/ws-exception-filters/catch-all.exception-filter';
+import { TypingEventDto } from './dtos/typing-event.dto';
+@UseFilters(WsCatchAllExceptionsFilter)
+@UsePipes(
+  new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+    exceptionFactory: (validationErrors = []) => {
+      console.log('VALIDATION FAILED++++++++++++++++++++++');
+      console.log(validationErrors);
+      return new BadRequestException(
+        validationErrors.map((error) => Object.values(error.constraints)[0]),
+      );
+    },
+  }),
+)
+@WebSocketGateway(3001)
+export class WSGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
-  private server: Server;
-  private namespace: Namespace;
+  server: Server;
 
-  afterInit(server: Server) {
-    this.namespace = server.of(MESSAGE_WS_NAMESPACE);
-    console.log('WebSocket server initialized and namespace set.');
+  constructor(
+    private authService: AuthService,
+    private wsService: WSService,
+    private redisIoAdapter: RedisIoAdapter,
+  ) {}
+
+  async afterInit(@ConnectedSocket() socket: Socket) {
+    socket.use(AuthWsMiddleware(this.authService) as any);
+    this.wsService.setServer(this.server);
   }
 
-  @SubscribeMessage('newMessage')
-  handleNewMessageEvent(@MessageBody() data: any): WsResponse<any> {
-    return { event: 'events', data };
+  async handleConnection(client: AuthenticatedSocket) {
+    const userId = client.user._id.toString();
+    const socketId = client.id;
+
+    // Add the socket ID to Redis
+    await this.redisIoAdapter
+      .getPubClient()
+      .sAdd('connected_clients', socketId);
+    await this.redisIoAdapter.getPubClient().set(`user:${userId}`, socketId);
+
+    // console.log(`Set user:${userId} = ${socketId}`);
+    // console.log(
+    // 'All connected clients: on connect',
+    // await this.redisIoAdapter.getAllConnectedClients(),
+    // );
+  }
+
+  async handleDisconnect(client: AuthenticatedSocket) {
+    const userId = client.user._id.toString();
+    const socketId = client.id;
+
+    // Remove the socket ID from Redis
+    await this.redisIoAdapter
+      .getPubClient()
+      .sRem('connected_clients', socketId);
+    await this.redisIoAdapter.getPubClient().del(`user:${userId}`);
+
+    console.log(`Removed user:${userId} = ${socketId}`);
+    // console.log(
+    //   'All connected  clients: list on Disconnect',
+    //   await this.redisIoAdapter.getAllConnectedClients(),
+    // );
+  }
+
+  @SubscribeMessage('new')
+  async handlePrivateMessage(@MessageBody() newMessage: CreateMessageDto) {
+    console.log('+++++++++++++ MESSAGE RECEIVED +++++++++++++++++++');
+    console.log(newMessage);
+
+    const redisKey = `user:${newMessage.receiverId}`;
+
+    const recipientSocketId = await this.redisIoAdapter
+      .getPubClient()
+      .get(redisKey);
+
+    await this.wsService.publishMessage(recipientSocketId, newMessage);
+  }
+  // create a new method to handle the typing event
+  @SubscribeMessage('typing')
+  async handleTypingEvent(@MessageBody() data: TypingEventDto) {
+    console.log('+++++++++++++ TYPING RECEIVED +++++++++++++++++++');
+    console.log(data);
+
+    const redisKey = `user:${data.receiverId}`;
+
+    const recipientSocketId = await this.redisIoAdapter
+      .getPubClient()
+      .get(redisKey);
+    // if the recipient is not connected, do nothing meaning recipient is offline
+    if (!recipientSocketId) {
+      return;
+    }
+
+    await this.wsService.publishTypingEvent({ recipientSocketId, ...data });
   }
 }
-export default WSGateway;

@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NextConfigService } from '@nestjs/config';
 import { EnvironmentVariablesType } from 'src/common/schemas/envs.schema';
+import {
+  FIVE_MINUTES_IN_MILLISECONDS,
+  FIVER_SECONDS_IN_MILLISECONDS,
+  ONE_THOUSAND_JOBS,
+  QUEUE_JOBS_ATTEMPTS_In_CASE_OF_FAILURE,
+} from 'src/common/constants';
 
 @Injectable()
 export class ConfigService {
@@ -24,5 +30,16 @@ export class ConfigService {
   getJwtExpiryString(): string {
     const tokenExpiresInDays = Number(this.get('JWT_COOKIE_EXPIRES_IN'));
     return `${tokenExpiresInDays}d`;
+  }
+  getQueueJobConfigOptions() {
+    return {
+      attempts: QUEUE_JOBS_ATTEMPTS_In_CASE_OF_FAILURE,
+      backoff: { type: 'fixed', delay: FIVER_SECONDS_IN_MILLISECONDS },
+      removeOnComplete: {
+        age: FIVE_MINUTES_IN_MILLISECONDS,
+        count: ONE_THOUSAND_JOBS,
+      },
+      removeOnFail: { count: ONE_THOUSAND_JOBS },
+    };
   }
 }

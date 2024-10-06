@@ -12,8 +12,8 @@ import envSchema from 'src/common/schemas/envs.schema';
       cache: true,
       expandVariables: true, //NOTE This is required to enable the variable extension in the environments variables file like this ${database}/xyz,
       envFilePath: isDevEnvironment
-        ? path.resolve(__dirname, '../../../.env.local.database')
-        : path.resolve(__dirname, '../../../.env.prod.database'),
+        ? path.resolve('./.env.local.database')
+        : path.resolve('./.env.prod.database'),
       validationSchema: envSchema,
     }),
   ],
