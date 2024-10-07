@@ -33,6 +33,7 @@ import {
 import { MESSAGES } from 'src/common/messages/index';
 import { LoginSwagger } from './swagger/login.swagger';
 import { DUMMY_USER } from '@mock';
+import { UserResponseDto } from 'src/common/dtos/user-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -84,7 +85,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @BypassUserActiveCheck(true)
   @ApiBearerAuth()
-  getProfile(@Request() req: IRequest) {
+  getProfile(@Request() req: IRequest): UserResponseDto {
     return this.authService.getProfile(req.user);
   }
 

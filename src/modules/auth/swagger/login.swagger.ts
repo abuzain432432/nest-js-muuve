@@ -3,57 +3,62 @@ import {
   ApiOkResponse,
   ApiUnauthorizedResponse,
   ApiBadRequestResponse,
+  ApiForbiddenResponse,
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
-import { DUMMY_USER } from '@mock';
+import { UserResponseDto } from 'src/common/dtos/user-response.dto';
 
 export function LoginSwagger() {
   return applyDecorators(
     ApiBody({
-      description:
-        'User credentials for login. If TFA is enabled, OTP is required.',
+      description: 'User credentials for login.',
       schema: {
-        type: 'object',
-        properties: {
-          email: { type: 'string', example: 'user@example.com' },
-          password: { type: 'string', example: 'password123' },
-          otp: {
-            type: 'string',
-            example: '123456',
-            description: 'OTP for TFA (only required if TFA is enabled)',
+        oneOf: [
+          {
+            type: 'object',
+            properties: {
+              email: { type: 'string', example: 'user@example.com' },
+              password: { type: 'string', example: 'password123' },
+            },
+            required: ['email', 'password'],
+            description: 'Login without OTP',
           },
-        },
-        required: ['email', 'password'],
+          {
+            type: 'object',
+            properties: {
+              email: { type: 'string', example: 'user@example.com' },
+              password: { type: 'string', example: 'password123' },
+              otp: {
+                type: 'string',
+                example: '123456',
+                description: 'OTP for TFA (required if TFA is enabled)',
+              },
+            },
+            required: ['email', 'password', 'otp'],
+            description: 'Login with OTP',
+          },
+        ],
       },
     }),
     ApiOkResponse({
       description: 'Login successful',
+      type: UserResponseDto,
+    }),
+    ApiForbiddenResponse({
+      description: 'Invalid OTP',
       schema: {
         type: 'object',
         properties: {
-          token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR...' },
-          user: {
-            type: 'object',
-            example: { DUMMY_USER },
-          },
+          message: { type: 'string', example: 'Invalid 2FA token' },
         },
       },
     }),
     ApiUnauthorizedResponse({
-      description: 'Unauthorized - Invalid credentials or OTP required',
+      description: 'Invalid credentials',
       schema: {
         type: 'object',
         properties: {
-          message: { type: 'string', example: 'Unauthorized' },
-        },
-      },
-    }),
-    ApiBadRequestResponse({
-      description: 'Bad Request - Missing or invalid OTP',
-      schema: {
-        type: 'object',
-        properties: {
-          message: { type: 'string', example: 'Invalid OTP token' },
+          message: { type: 'string', example: 'Invalid credentials' },
         },
       },
     }),

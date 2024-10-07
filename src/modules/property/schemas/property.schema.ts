@@ -2,9 +2,9 @@ import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { PropertyStatusEnum } from 'src/modules/property/enums/property-status.enum';
 import { PropertyTypeEnum } from 'src/modules/property/enums/property-type-enum';
+
 export type PropertyDocument = HydratedDocument<Property>;
 
-@Schema({ timestamps: true })
 @Schema({ timestamps: true })
 export class Property {
   @Prop({ required: true })

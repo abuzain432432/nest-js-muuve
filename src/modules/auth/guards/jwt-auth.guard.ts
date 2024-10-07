@@ -15,11 +15,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<IRequest>();
-
     // Perform default JWT authentication first
     const canActivate = (await super.canActivate(context)) as boolean;
+
     if (!canActivate) return false;
     const user = request.user;
+
     const bypassUserActiveCheck = this.reflector.get<boolean>(
       BypassUserActiveCheck,
       context.getHandler(),

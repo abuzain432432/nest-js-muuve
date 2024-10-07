@@ -8,6 +8,7 @@ import {
 import { Match } from 'src/common/decorators/match.decorator';
 import { Transform } from 'class-transformer';
 import { RolesEnum } from 'src/common/enums/roles.enum';
+import { ExcludeRole } from 'src/common/decorators/exclude-role.decorator';
 
 export class SignupDto {
   @MinLength(3, { message: 'First name must be at least 3 characters long' })
@@ -41,5 +42,8 @@ export class SignupDto {
 
   @IsEnum(RolesEnum, { message: 'Role must be a valid role' })
   @IsNotEmpty({ message: 'Role is required' })
+
+  // TODO customer the behavior of swagger to show only the allowed roles
+  @ExcludeRole(RolesEnum.ADMIN)
   role: RolesEnum;
 }
