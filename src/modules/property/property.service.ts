@@ -5,6 +5,8 @@ import { Property, PropertyDocument } from './schemas/property.schema';
 import { CreatePropertyDto } from './dtos/create-property.dto';
 import { PropertyStatusEnum } from './enums/property-status.enum';
 import { IUser } from 'src/common/types/user.type';
+import { PropertyStatsResponseDto } from './dtos/property-stats-response.dto';
+import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
 
 @Injectable()
 export class PropertyService {
@@ -59,20 +61,6 @@ export class PropertyService {
   async gePropertiesStats(user: IUser, year: number) {
     const startOfYear = new Date(`${year}-01-01`);
     const endOfYear = new Date(`${year}-12-31`);
-
-    const currentDate = new Date();
-    const currentWeekStart = new Date(
-      currentDate.setDate(currentDate.getDate() - currentDate.getDay()),
-    );
-    const currentWeekEnd = new Date(
-      currentDate.setDate(currentWeekStart.getDate() + 6),
-    );
-
-    const previousWeekStart = new Date(currentWeekStart);
-    previousWeekStart.setDate(previousWeekStart.getDate() - 7);
-    const previousWeekEnd = new Date(currentWeekEnd);
-    previousWeekEnd.setDate(previousWeekEnd.getDate() - 7);
-
     const monthlyOverview = await this.propertyModel.aggregate([
       {
         $match: {
@@ -119,10 +107,10 @@ export class PropertyService {
               ],
             },
           },
-          pending: {
+          pendingPayment: {
             $sum: {
               $cond: [
-                { $eq: ['$_id.status', PropertyStatusEnum.DRAFT] },
+                { $eq: ['$_id.status', PropertyStatusEnum.PENDING_PAYMENT] },
                 '$count',
                 0,
               ],
@@ -151,38 +139,6 @@ export class PropertyService {
       },
       { $sort: { month: 1 } },
     ]);
-
-    // const totalToursRequests = await this.tourModel.aggregate([
-    //   {
-    //     $match: {
-    //       owner: user._id,
-    //       createdAt: {
-    //         $gte: startOfYear,
-    //         $lte: endOfYear,
-    //       },
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: { $month: '$createdAt' },
-    //       count: { $sum: 1 },
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       total: { $sum: '$count' },
-    //     },
-    //   },
-    //   {
-    //     $project: {
-    //       _id: 0,
-    //       total: 1,
-    //     },
-    //   },
-    // ]);
-
-    // const totalToursRequestsCount = totalToursRequests[0]?.total || 0;
 
     // Step 3: Aggregate total applications requests for the user
     // const totalApplicationsRequests = await this.applicationModel.aggregate([
@@ -215,34 +171,6 @@ export class PropertyService {
     //   },
     // ]);
 
-    // const totalApplicationsRequestsCount =
-    //   totalApplicationsRequests[0]?.total || 0;
-
-    // const currentWeekToursRequests = await this.tourModel.countDocuments({
-    //   owner: user._id,
-    //   createdAt: {
-    //     $gte: currentWeekStart,
-    //     $lte: currentWeekEnd,
-    //   },
-    // });
-
-    // const previousWeekToursRequests = await this.tourModel.countDocuments({
-    //   owner: user._id,
-    //   createdAt: {
-    //     $gte: previousWeekStart,
-    //     $lte: previousWeekEnd,
-    //   },
-    // });
-
-    // const toursPercentageIncrease =
-    //   previousWeekToursRequests > 0
-    //     ? ((currentWeekToursRequests - previousWeekToursRequests) /
-    //         previousWeekToursRequests) *
-    //       100
-    //     : currentWeekToursRequests > 0
-    //       ? 100
-    //       : 0; // If no requests last week but some this week, consider it a 100% increase
-
     // // Step 6: Calculate the number of application requests for the current and previous weeks
     // const currentWeekApplicationsRequests =
     //   await this.applicationModel.countDocuments({
@@ -273,27 +201,37 @@ export class PropertyService {
     //       ? 100
     //       : 0; // If no requests last week but some this week, consider it a 100% increase
 
-    // Step 8: Prepare the properties stats array
+    const defaultStats = {
+      available: 0,
+      occupied: 0,
+      pending: 0,
+      draft: 0,
+    };
+
     const propertiesStats = Array.from({ length: 12 }, (_, i) => {
       const monthData = monthlyOverview.find(
         (item) => item.month === i + 1,
-      ) || {
-        month: i + 1,
-        available: 0,
-        occupied: 0,
-        pending: 0,
-        draft: 0,
-      };
-      return monthData;
+      ) || { month: i + 1 };
+      return Object.assign({}, defaultStats, monthData);
     });
 
-    // Step 9: Construct the final response
-    return {
-      // totalApplicationsRequests: totalApplicationsRequestsCount,
-      // totalToursRequests: totalToursRequestsCount,
-      // toursPercentageIncrease, // Include percentage increase for tours in the response
-      // applicationsPercentageIncrease, // Include percentage increase for applications in the response
-      propertiesStats,
-    };
+    const totalDraft = propertiesStats.reduce(
+      (acc, item) => acc + item.draft,
+      0,
+    );
+    const totalAvailable = propertiesStats.reduce(
+      (acc, item) => acc + item.available,
+      0,
+    );
+    const totalOccupied = propertiesStats.reduce(
+      (acc, item) => acc + item.occupied,
+      0,
+    );
+    return transformToDto(PropertyStatsResponseDto, {
+      stats: propertiesStats,
+      totalDraft,
+      totalAvailable,
+      totalOccupied,
+    });
   }
 }

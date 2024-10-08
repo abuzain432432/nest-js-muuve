@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { StatsService } from './stats.service';
-import { PropertyModule } from '../property/property.module';
+import { PropertyModule } from 'src/modules/property/property.module';
 import { StatsController } from './stats.controller';
+import { TourModule } from 'src/modules/tour/tour.module';
 
 @Module({
-  imports: [PropertyModule],
+  imports: [PropertyModule, TourModule],
   providers: [StatsService],
   controllers: [StatsController],
 })

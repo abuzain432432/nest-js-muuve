@@ -14,13 +14,32 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { TourService } from './tour.service';
 import { IRequest } from 'src/common/types/request.type';
 import { CreateTourDto } from './dtos/create-tour.dto';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+} from '@nestjs/swagger';
+import { GetToursResponseDto } from './dtos/get-tours-response.dto';
+import { GetTourResponseDto } from './dtos/get-tour-response.dto';
+import { MESSAGES } from 'src/common/messages';
 
 @ApiTags('Tours')
 @Controller('tours')
 export class TourController {
   constructor(private tourService: TourService) {}
   @Post()
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
+  })
+  @ApiForbiddenResponse({
+    description: 'Forbidden',
+    example: { message: MESSAGES.ACTION_NOT_ALLOWED },
+  })
   @Roles([RolesEnum.TENANT])
   @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() data: CreateTourDto, @Request() req: IRequest) {
@@ -28,21 +47,50 @@ export class TourController {
   }
 
   @Get(':id/approve')
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
+  })
+  @ApiForbiddenResponse({
+    description: 'Forbidden',
+    example: { message: MESSAGES.ACTION_NOT_ALLOWED },
+  })
+  @ApiBearerAuth()
   @Roles([RolesEnum.LANDLORD, RolesEnum.AGENT])
   @UseGuards(JwtAuthGuard, RolesGuard)
   approveTour(@Request() req: IRequest, @Param('id') id: string) {
     return this.tourService.approveTour(id, req.user);
   }
+
   @Get(':id/reject')
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
+  })
+  @ApiForbiddenResponse({
+    description: 'Forbidden',
+    example: { message: MESSAGES.ACTION_NOT_ALLOWED },
+  })
   @Roles([RolesEnum.LANDLORD, RolesEnum.AGENT])
   @UseGuards(JwtAuthGuard, RolesGuard)
   rejectTour(@Request() req: IRequest, @Param('id') id: string) {
     return this.tourService.rejectTour(id, req.user);
   }
-  @Get('/properties')
-  @Roles([RolesEnum.LANDLORD, RolesEnum.AGENT])
+
+  @Get()
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
+  })
+  @ApiForbiddenResponse({
+    description: 'Forbidden',
+    example: { message: MESSAGES.ACTION_NOT_ALLOWED },
+  })
+  @ApiBearerAuth()
+  @Roles([RolesEnum.LANDLORD, RolesEnum.AGENT, RolesEnum.TENANT])
   @UseGuards(JwtAuthGuard, RolesGuard)
-  getMyPropertiesTours(@Request() req: IRequest) {
-    return this.tourService.getMyPropertiesTours(req.user);
+  getMyTours(@Request() req: IRequest) {
+    return this.tourService.getMyTours(req.user);
   }
 }

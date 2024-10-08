@@ -9,5 +9,6 @@ import { Tour, TourSchema } from './schemas/tour.schema';
   ],
   providers: [TourService],
   controllers: [TourController],
+  exports: [TourService],
 })
 export class TourModule {}
