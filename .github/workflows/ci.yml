@@ -11,11 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: test
 
     services:
       docker:
         image: docker:latest
         options: --privileged
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,6 +28,24 @@ jobs:
           chmod +x /usr/local/bin/docker-compose
 
       - name: Build Docker containers
+        env:
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+          JWT_COOKIE_EXPIRES_IN: ${{ secrets.JWT_COOKIE_EXPIRES_IN }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          GOOGLE_AUTH_CLIENT_ID: ${{ secrets.GOOGLE_AUTH_CLIENT_ID }}
+          GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }}
+          GOOGLE_AUTH_CALLBACK_URL: ${{ secrets.GOOGLE_AUTH_CALLBACK_URL }}
+          FRONTEND_EMAIL_SERVICE_URL: ${{ secrets.FRONTEND_EMAIL_SERVICE_URL }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEB_HOOK_SECRET: ${{ secrets.STRIPE_WEB_HOOK_SECRET }}
+          FRONTEND_BASE_URL: ${{ secrets.FRONTEND_BASE_URL }}
+          MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
+          MAILOSAUR_EMAIL: ${{ secrets.MAILOSAUR_EMAIL }}
         run: docker-compose -f docker-compose.test.yml up --build -d
 
       - name: Run lint and format
