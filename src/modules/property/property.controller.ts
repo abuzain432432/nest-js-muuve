@@ -6,7 +6,6 @@ import {
   Post,
   Request,
   Param,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dtos/create-property.dto';
 import { PropertyService } from './property.service';

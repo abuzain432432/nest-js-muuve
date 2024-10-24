@@ -10,10 +10,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "paths": {
-      "@mock": ["__mock__/index"],
-      "@mock/*": ["__mock__/*"]
-    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,

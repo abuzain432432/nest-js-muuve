@@ -2,7 +2,6 @@ import {
   ApiBody,
   ApiOkResponse,
   ApiUnauthorizedResponse,
-  ApiBadRequestResponse,
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';

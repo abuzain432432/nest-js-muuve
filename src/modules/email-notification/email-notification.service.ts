@@ -15,6 +15,7 @@ export class EmailNotificationService {
     private emailNotificationQueue: Queue,
     private validationService: ValidationService,
   ) {}
+
   async sendActivateAccountEmail(data: ActivateAccountEmailDto) {
     await this.validationService.validateDto(ActivateAccountEmailDto, {
       ...data,

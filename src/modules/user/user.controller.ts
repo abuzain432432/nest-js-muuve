@@ -7,15 +7,9 @@ import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 
 import {
-  ApiBody,
-  ApiResponse,
   ApiTags,
-  ApiOkResponse,
-  ApiCreatedResponse,
   ApiBearerAuth,
-  ApiBadRequestResponse,
   ApiUnauthorizedResponse,
-  ApiExcludeEndpoint,
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
 import { MESSAGES } from 'src/common/messages';

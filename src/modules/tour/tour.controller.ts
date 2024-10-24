@@ -16,14 +16,11 @@ import { IRequest } from 'src/common/types/request.type';
 import { CreateTourDto } from './dtos/create-tour.dto';
 import {
   ApiTags,
-  ApiOkResponse,
   ApiUnauthorizedResponse,
   ApiBearerAuth,
-  ApiCreatedResponse,
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
-import { GetToursResponseDto } from './dtos/get-tours-response.dto';
-import { GetTourResponseDto } from './dtos/get-tour-response.dto';
+
 import { MESSAGES } from 'src/common/messages';
 
 @ApiTags('Tours')

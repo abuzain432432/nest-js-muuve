@@ -27,6 +27,10 @@ export class RedisIoAdapter
       this.subClient = this.pubClient.duplicate();
 
       await Promise.all([this.pubClient.connect(), this.subClient.connect()]);
+      console.log(
+        'Connected to Redis+++++++++++++++++++++++++++++++++++++++++++++',
+      );
+
       this.adapterConstructor = createAdapter(this.pubClient, this.subClient);
     } catch (error) {
       console.error('Error connecting to Redis:', error);

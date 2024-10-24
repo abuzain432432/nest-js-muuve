@@ -20,8 +20,6 @@ import { IRequest } from 'src/common/types/request.type';
 import { BypassUserActiveCheck } from 'src/common/decorators/bypass-user-active-check.decorator';
 import { RecoverTfaDto } from './dtos/recover-tfa.dto';
 import {
-  ApiBody,
-  ApiResponse,
   ApiTags,
   ApiOkResponse,
   ApiCreatedResponse,
@@ -32,7 +30,6 @@ import {
 } from '@nestjs/swagger';
 import { MESSAGES } from 'src/common/messages/index';
 import { LoginSwagger } from './swagger/login.swagger';
-import { DUMMY_USER } from '@mock';
 import { UserResponseDto } from 'src/common/dtos/user-response.dto';
 
 @ApiTags('Auth')
@@ -111,17 +108,6 @@ export class AuthController {
       req.user._id,
       data,
     );
-  }
-  @Get('/activate/:token')
-  @ApiOkResponse({
-    description: 'Success',
-    example: {
-      message: MESSAGES.ACCOUNT_ACTIVATED,
-    },
-  })
-  @ApiBadRequestResponse({ example: { message: MESSAGES.INVALID_OTP_TOKEN } })
-  activateAccount(@Param('token') token: string) {
-    return this.authService.activateAccount(token);
   }
 
   @Get('/qrcode-tfa')
@@ -207,5 +193,16 @@ export class AuthController {
   })
   async recoverTfa(@Body() data: RecoverTfaDto) {
     return await this.authService.recoverTfa(data.recoveryToken);
+  }
+  @Get('/activate/:token')
+  @ApiOkResponse({
+    description: 'Success',
+    example: {
+      message: MESSAGES.ACCOUNT_ACTIVATED,
+    },
+  })
+  @ApiBadRequestResponse({ example: { message: MESSAGES.INVALID_OTP_TOKEN } })
+  activateAccount(@Param('token') token: string) {
+    return this.authService.activateAccount(token);
   }
 }

@@ -27,7 +27,7 @@ export class WSService implements OnModuleInit {
       this.pubClient = this.redisIoAdapter.getPubClient();
       this.subClient = this.redisIoAdapter.getSubClient();
       this.subClient.on('error', (error) => {
-        console.error('Redis subscription error:', error);
+        console.log('Redis subscription error:', error);
       });
 
       this.subClient.subscribe(

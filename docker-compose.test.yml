@@ -1,0 +1,38 @@
+services:
+  muuve_nestjs_api_test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    ports:
+      - '3000:3000' # For your main application
+      - '3001:3001' # For WebSocket server
+    environment:
+      NODE_ENV: test
+      PORT: 3000
+      REDIS_URL: redis://redis:6379
+      SCOKET_PORT: 3001
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - redis
+      - database
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+  database:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminadmin
+      MONGO_INITDB_DATABASE: muuve_test_db
+    volumes:
+      - mongo_data_test:/data/db
+volumes:
+  mongo_data_test:
+    driver: local

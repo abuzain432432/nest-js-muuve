@@ -169,6 +169,8 @@ export class AuthService {
   }
 
   async generateQrCode(user: IUser) {
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+    console.log(user);
     // TODO will need to rethink this logic
     if (user.provider !== AuthProvidersEnum.CUSTOM) {
       throw new BadRequestException(MESSAGES.TWO_FACTOR_SERVICE_NOT_AVAILABLE);
@@ -181,14 +183,14 @@ export class AuthService {
       length: 20,
     });
 
-    const otpauthUrl = speakeasy.otpauthURL({
+    const otpAuthUrl = speakeasy.otpauthURL({
       secret: secret.base32,
       label: `Muuve (${user.email})`,
       encoding: 'base32',
     });
 
     await this.userService.saveTfaSecret(user._id, secret.base32);
-    return { url: (await qrcode.toDataURL(otpauthUrl)) as string };
+    return { url: (await qrcode.toDataURL(otpAuthUrl)) as string };
   }
   verifyMfaToken(secret: string, token: string): boolean {
     return speakeasy.totp.verify({ secret, encoding: 'base32', token });
@@ -218,7 +220,7 @@ export class AuthService {
     }
     const isValid = this.verifyMfaToken(user.tfaSecret, token);
     if (!isValid) {
-      throw new BadRequestException('Invalid token');
+      throw new BadRequestException(MESSAGES.INVALID_OTP_TOKEN);
     }
     await this.userService.update(user._id, { tfa: false, tfaSecret: '' });
     return { message: MESSAGES.TWO_FACTOR_DISABLED_SUCCESS };

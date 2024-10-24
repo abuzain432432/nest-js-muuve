@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUrl, IsMongoId } from 'class-validator';
+import { IsNotEmpty, IsUrl, IsMongoId } from 'class-validator';
 
 export class CreateListingFeeCheckoutDto {
   @IsMongoId({ message: 'Invalid propertyId' })

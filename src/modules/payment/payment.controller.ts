@@ -8,7 +8,6 @@ import {
   Req,
   RawBodyRequest,
   Headers,
-  BadRequestException,
 } from '@nestjs/common';
 import PaymentService from './payment.service';
 import { RolesEnum } from 'src/common/enums/roles.enum';

@@ -7,7 +7,6 @@ services:
       - '3000:3000' # For your main application
       - '3001:3001' # For WebSocket server
     environment:
-      - NODE_ENV=development
       - PORT=3000
       - REDIS_URL=redis://redis:6379 # Add Redis connection URL
     volumes:

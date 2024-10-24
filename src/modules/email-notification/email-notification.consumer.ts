@@ -5,13 +5,40 @@ import {
 } from 'src/common/constants';
 import { Job } from 'bullmq';
 import { EmailService } from 'src/modules/email/email.service';
-import { EmailTemplateIdsEnum } from 'src/common/enums/email-template-ids.enum';
+// import { EmailTemplateIdsEnum } from 'src/common/enums/email-template-ids.enum';
 import { ActivateAccountEmailDto } from 'src/common/dtos/activateAccountEmail.dto';
+import * as sgMail from '@sendgrid/mail';
+import { ConfigService } from '../config/config.service';
 
 @Processor(EMAIL_NOTIFICATION_QUEUE_NAME)
 export class EmailNotificationConsumer extends WorkerHost {
-  constructor(private readonly generateEmailTemplateService: EmailService) {
+  constructor(
+    private readonly generateEmailTemplateService: EmailService,
+    private readonly configService: ConfigService,
+  ) {
     super();
+    sgMail.setApiKey(configService.get('SEND_GRID_API_KEY'));
+  }
+  async sendMail(
+    to: string,
+    subject: string,
+    text?: string,
+    html?: string,
+    headers?: any,
+  ) {
+    const msg = {
+      to: this.configService.get('MAILOSAUR_EMAIL'),
+      from: this.configService.get('SENDER_EMAIL'),
+      subject,
+      text,
+      html,
+      headers,
+    };
+    console.log('++++++++++++++++++++++++++');
+    console.log(msg);
+
+    await sgMail.send(msg);
+    return { success: true };
   }
   async process(job: Job<any, any, string>) {
     try {
@@ -32,11 +59,17 @@ export class EmailNotificationConsumer extends WorkerHost {
   }
 
   async processActivateAccount(data: ActivateAccountEmailDto) {
-    const template = await this.generateEmailTemplateService.getEmailTemplate(
-      { templateId: EmailTemplateIdsEnum.ActivateAccount },
-      data,
-    );
-    console.log(template);
+    // const template = await this.generateEmailTemplateService.getEmailTemplate(
+    //   { templateId: EmailTemplateIdsEnum.ActivateAccount },
+    //   data,
+    // );
+    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+    console.log(data);
+    // const template = {
+    //   subject: `Activate Account for ${data.email}`,
+    //   html: `<p>Use this otp to activate your account <span class="otpCode">${data.otp}</span></p> `,
+    // };
+    // await this.sendMail(data.email, template.subject, undefined, template.html);
   }
   /**
    * This method is called when a job fails

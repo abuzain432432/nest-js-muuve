@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import * as cookieParser from 'cookie-parser';
 // import helmet from 'helmet';
 import { RedisIoAdapter } from './modules/ws/adapters/redis.adapter';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { setupGlobalPipes } from './common/lib/setup-global-pipes.lib';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -16,25 +16,14 @@ async function bootstrap() {
   const port = process.env.PORT;
   // app.use(helmet());
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      exceptionFactory: (validationErrors = []) => {
-        return new BadRequestException(
-          validationErrors.map((error) => Object.values(error.constraints)[0]),
-        );
-      },
-    }),
-  );
+  setupGlobalPipes(app);
 
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.useGlobalInterceptors(new TimeoutInterceptor());
 
   const redisIoAdapter = new RedisIoAdapter();
   await redisIoAdapter.connectToRedis();
-  app.useWebSocketAdapter(redisIoAdapter);
+  app.useWebSocketAdapter(redisIoAdapter as any);
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()

@@ -1,8 +1,6 @@
 import * as Joi from 'joi';
 const envSchema = Joi.object({
-  NODE_ENV: Joi.string().valid('development', 'production').required(),
-  DATABASE_USER: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required(),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
   MONGODB_URL: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
   COOKIE_SECRET: Joi.string().required(),
@@ -14,12 +12,14 @@ const envSchema = Joi.object({
   STRIPE_SECRET_KEY: Joi.string().required(),
   STRIPE_WEB_HOOK_SECRET: Joi.string().required(),
   FRONTEND_BASE_URL: Joi.string().required(),
+  SEND_GRID_API_KEY: Joi.string().required(),
+  SENDER_EMAIL: Joi.string().required(),
+  MAILOSAUR_API_KEY: Joi.string().optional(),
+  MAILOSAUR_EMAIL: Joi.string().optional(),
 });
 export type EnvironmentVariablesType = {
-  NODE_ENV: 'development' | 'production';
+  NODE_ENV: 'development' | 'production' | 'test';
   MONGODB_URL: string;
-  DATABASE_USER: string;
-  DATABASE_PASSWORD: string;
   COOKIE_SECRET: string;
   JWT_SECRET: string;
   JWT_COOKIE_EXPIRES_IN: number;
@@ -30,5 +30,9 @@ export type EnvironmentVariablesType = {
   STRIPE_SECRET_KEY: string;
   STRIPE_WEB_HOOK_SECRET: string;
   FRONTEND_BASE_URL: string;
+  SEND_GRID_API_KEY: string;
+  SENDER_EMAIL: string;
+  MAILOSAUR_API_KEY?: string;
+  MAILOSAUR_EMAIL?: string;
 };
 export default envSchema;

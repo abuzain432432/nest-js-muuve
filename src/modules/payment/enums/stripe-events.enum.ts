@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export enum StripeEventsTypesEnum {
   CheckoutSessionCompleted = 'checkout.session.completed',
   InvoicePaymentSucceeded = 'invoice.payment_succeeded',
