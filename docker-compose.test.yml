@@ -1,6 +1,6 @@
 # docker-compose.test.yml
 services:
-  muuve_nestjs_api_test:
+  app:
     build:
       context: .
       dockerfile: Dockerfile.test
@@ -8,7 +8,6 @@ services:
       - '3000:3000' # For your main application
       - '3001:3001' # For WebSocket server
     environment:
-      NODE_ENV: test
       PORT: 3000
       REDIS_URL: redis://redis:6379
       SCOKET_PORT: 3001

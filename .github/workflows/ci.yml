@@ -16,30 +16,25 @@ jobs:
       docker:
         image: docker:latest
         options: --privileged
-
     steps:
-      # 1. Checkout code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      # 2. Install Docker Compose
-      - name: Install Docker Compose
+      - name: Set up Docker Compose
         run: |
           curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
 
-      # 3. Set up Docker Compose
-      - name: Set up Docker Compose
+      - name: Build Docker containers
         run: docker-compose -f docker-compose.test.yml up --build -d
 
-      # 4. Run lint and format inside the Docker container
-      - name: Run lint and format inside Docker
-        run: docker-compose -f docker-compose.test.yml exec muuve_nestjs_api_test npm run lint && npm run format
+      - name: Run lint and format
+        run: |
+          docker-compose -f docker-compose.test.yml exec app npm run lint
+          docker-compose -f docker-compose.test.yml exec app npm run format
 
-      # 5. Run unit tests inside Docker
-      - name: Run tests inside Docker
-        run: docker-compose -f docker-compose.test.yml exec muuve_nestjs_api_test npm run test:unit
+      - name: Run unit tests
+        run: docker-compose -f docker-compose.test.yml exec app npm run test:unit
 
-      # 6. Tear down Docker containers
       - name: Tear down Docker containers
         run: docker-compose -f docker-compose.test.yml down
