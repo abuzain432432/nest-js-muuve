@@ -12,20 +12,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20'
+      - name: Build Docker container
+        run: docker build -t my-app .
 
-      - name: Install dependencies
-        run: npm install
+      - name: Run lint and format inside Docker
+        run: docker run my-app npm run lint && npm run format
 
-      - name: Run lint
-        run: npm run lint
-
-      - name: Run unit tests
-        run: npm run test:unit
+      - name: Run tests inside Docker
+        run: docker run my-app npm run test:unit
