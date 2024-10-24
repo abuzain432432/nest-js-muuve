@@ -21,11 +21,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build Docker container
-        run: docker build -t my-app .
+      - name: Set up Docker Compose
+        run: docker-compose -f docker-compose.test.yml up --build -d
 
       - name: Run lint and format inside Docker
-        run: docker run my-app npm run lint && npm run format
+        run: docker-compose -f docker-compose.test.yml exec muuve_nestjs_api_test npm run lint && npm run format
 
       - name: Run tests inside Docker
-        run: docker run my-app npm run test:unit
+        run: docker-compose -f docker-compose.test.yml exec muuve_nestjs_api_test npm run test:unit
+
+      - name: Tear down Docker containers
+        run: docker-compose -f docker-compose.test.yml down
