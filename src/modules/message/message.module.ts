@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module } from "@nestjs/common";
+import { MongooseModule } from "@nestjs/mongoose";
 
-import { MessageController } from './message.controller';
-import { MessageService } from './message.service';
-import { Message, MessageSchema } from './schemas/message.schema';
+import { MessageController } from "./message.controller";
+import { MessageService } from "./message.service";
+import { Message, MessageSchema } from "./schemas/message.schema";
 
 @Module({
   imports: [

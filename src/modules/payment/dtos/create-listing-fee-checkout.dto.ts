@@ -1,21 +1,21 @@
-import { IsNotEmpty, IsUrl, IsMongoId } from 'class-validator';
+import { IsNotEmpty, IsUrl, IsMongoId } from "class-validator";
 
 export class CreateListingFeeCheckoutDto {
-  @IsMongoId({ message: 'Invalid propertyId' })
-  @IsNotEmpty({ message: 'propertyId is required' })
+  @IsMongoId({ message: "Invalid propertyId" })
+  @IsNotEmpty({ message: "propertyId is required" })
   propertyId: string;
 
   @IsUrl(
     { require_protocol: false },
-    { message: 'cancelUrl must be a valid URL' },
+    { message: "cancelUrl must be a valid URL" },
   )
-  @IsNotEmpty({ message: 'cancelUrl is required' })
+  @IsNotEmpty({ message: "cancelUrl is required" })
   cancelUrl: string;
 
   @IsUrl(
     { require_protocol: false },
-    { message: 'successUrl must be a valid URL' },
+    { message: "successUrl must be a valid URL" },
   )
-  @IsNotEmpty({ message: 'successUrl is required' })
+  @IsNotEmpty({ message: "successUrl is required" })
   successUrl: string;
 }

@@ -4,8 +4,8 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-} from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+} from "@nestjs/common";
+import { HttpAdapterHost } from "@nestjs/core";
 
 @Catch()
 // NOTE Don't manually instantiate filters with new when using them at the method or controller level in NestJS.
@@ -18,13 +18,13 @@ export class CatchAllExceptionsFilter implements ExceptionFilter {
     const path = httpAdapter.getRequestUrl(ctx.getRequest());
     let message: string;
     let httpStatus: number = HttpStatus.INTERNAL_SERVER_ERROR;
-    console.log('_____________________________');
+    console.log("_____________________________");
     console.log(exception);
     const isMongooseValidationError = exception.errors;
     if (isMongooseValidationError) {
       message = Object.values(exception.errors)
         .map((error: any) => error.message)
-        .join(', ');
+        .join(", ");
       httpStatus = HttpStatus.BAD_REQUEST;
     } else if (exception?.code === 11000) {
       const [key, value] = Object.entries(exception.errorResponse.keyValue)[0];
@@ -33,12 +33,12 @@ export class CatchAllExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof HttpException) {
       const response = exception.getResponse();
       message =
-        typeof response === 'string'
+        typeof response === "string"
           ? response
           : (response as any).message || exception.message;
       httpStatus = exception.getStatus();
     } else {
-      message = 'Internal server error';
+      message = "Internal server error";
     }
 
     const responseBody = {

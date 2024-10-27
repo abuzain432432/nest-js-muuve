@@ -1,24 +1,24 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { HttpService } from "@nestjs/axios";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 
-import { AxiosResponse, AxiosError, isAxiosError } from 'axios';
-import { firstValueFrom } from 'rxjs';
-import { EmailTemplateIdsEnum } from 'src/common/enums/email-template-ids.enum';
-import { ConfigService } from 'src/modules/config/config.service';
+import { AxiosResponse, AxiosError, isAxiosError } from "axios";
+import { firstValueFrom } from "rxjs";
+import { EmailTemplateIdsEnum } from "src/common/enums/email-template-ids.enum";
+import { ConfigService } from "src/modules/config/config.service";
 
 type EmailGenerateTemplateError = { message: string; error: any };
 
 @Injectable()
 export class EmailService {
   private defaultErrorMessage =
-    'An error occurred while generating the email template';
+    "An error occurred while generating the email template";
 
   constructor(
     private readonly httpService: HttpService,
     private configService: ConfigService,
   ) {
     this.httpService.axiosRef.defaults.baseURL = this.configService.get(
-      'FRONTEND_EMAIL_SERVICE_URL',
+      "FRONTEND_EMAIL_SERVICE_URL",
     );
   }
 
@@ -46,7 +46,7 @@ export class EmailService {
         const axiosError = error as AxiosError<EmailGenerateTemplateError>;
         if (!axiosError.response)
           throw new HttpException(
-            'No response from email service',
+            "No response from email service",
             HttpStatus.SERVICE_UNAVAILABLE,
           );
         const errorMessage =
@@ -56,7 +56,7 @@ export class EmailService {
         throw new HttpException(errorMessage, errorStatus);
       } else {
         throw new HttpException(
-          'Failed to generate email template: Unknown error',
+          "Failed to generate email template: Unknown error",
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }

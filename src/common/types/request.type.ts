@@ -1,6 +1,6 @@
-import { Request } from 'express';
+import { Request } from "express";
 
-import { IUser } from './user.type';
+import { IUser } from "./user.type";
 /**
  * Authenticated request interface
  **/

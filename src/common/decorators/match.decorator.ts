@@ -4,9 +4,9 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-} from 'class-validator';
+} from "class-validator";
 
-@ValidatorConstraint({ name: 'Match', async: false })
+@ValidatorConstraint({ name: "Match", async: false })
 export class MatchConstraint implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;

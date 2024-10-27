@@ -1,32 +1,32 @@
-import { Controller, Get, Param, UsePipes, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UsePipes, UseGuards } from "@nestjs/common";
 import {
   ApiTags,
   ApiBearerAuth,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { MESSAGES } from 'src/common/messages';
-import { IsMongoIdPipe } from 'src/common/pipes/monogo-id.pipe';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { Roles } from "src/common/decorators/roles.decorator";
+import { RolesEnum } from "src/common/enums/roles.enum";
+import { RolesGuard } from "src/common/guards/roles.guard";
+import { MESSAGES } from "src/common/messages";
+import { IsMongoIdPipe } from "src/common/pipes/monogo-id.pipe";
+import { JwtAuthGuard } from "src/modules/auth/guards/jwt-auth.guard";
 
-import { UserService } from './user.service';
+import { UserService } from "./user.service";
 
-@ApiTags('Users')
-@Controller('users')
+@ApiTags("Users")
+@Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized',
-    example: { message: 'Unauthorized' },
+    description: "Unauthorized",
+    example: { message: "Unauthorized" },
   })
   @ApiForbiddenResponse({
-    description: 'Forbidden',
+    description: "Forbidden",
     example: { message: MESSAGES.ACTION_NOT_ALLOWED },
   })
   @Roles([RolesEnum.ADMIN])
@@ -35,11 +35,11 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get(":id")
   @Roles([RolesEnum.ADMIN])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UsePipes(IsMongoIdPipe)
-  findOne(@Param('id', IsMongoIdPipe) id: string) {
+  findOne(@Param("id", IsMongoIdPipe) id: string) {
     console.log(id);
     return this.userService.findOneById(id);
   }

@@ -1,7 +1,7 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException } from "@nestjs/common";
 
-import { plainToInstance, ClassTransformOptions } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { plainToInstance, ClassTransformOptions } from "class-transformer";
+import { validateSync } from "class-validator";
 // Inspired by
 // https://medium.com/@rakibulh170/a-response-serializer-for-strictly-typed-response-in-nestjs-402e5667ff0a#:~:text=In%20NestJs%2C%20there%20is%20a,any%20things%20that%20we%20want.
 
@@ -31,7 +31,7 @@ export function transformToDto<T extends object>(
   if (errors.length > 0) {
     console.log(errors);
     // TODO: Log the errors
-    throw new InternalServerErrorException('Something went wrong');
+    throw new InternalServerErrorException("Something went wrong");
   }
 
   return dtoInstance;

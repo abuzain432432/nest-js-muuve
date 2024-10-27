@@ -1,12 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
 
-import { Model } from 'mongoose';
+import { Model } from "mongoose";
 
 import {
   Conversation,
   ConversationDocument,
-} from './schemas/conversation.schema';
+} from "./schemas/conversation.schema";
 
 @Injectable()
 export class ConversationService {
@@ -23,7 +23,7 @@ export class ConversationService {
   async findOneById(id: string) {
     const conversation = await this.conversationModel.findById(id);
     if (!conversation || conversation.deleted) {
-      throw new NotFoundException('Conversation not found');
+      throw new NotFoundException("Conversation not found");
     }
     return conversation;
   }

@@ -3,13 +3,13 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 
-import { HasActiveSubscription } from 'src/common/decorators/has-active-subscription.decorator';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-import { IRequest } from 'src/common/types/request.type';
-import { IUser } from 'src/common/types/user.type';
+import { HasActiveSubscription } from "src/common/decorators/has-active-subscription.decorator";
+import { RolesEnum } from "src/common/enums/roles.enum";
+import { IRequest } from "src/common/types/request.type";
+import { IUser } from "src/common/types/user.type";
 
 @Injectable()
 export class ActiveSubscriptionGuard implements CanActivate {
@@ -30,11 +30,11 @@ export class ActiveSubscriptionGuard implements CanActivate {
     }
     if (
       user.subscriptionId &&
-      user.invoiceStatus === 'paid' &&
-      user.subscriptionStatus === 'active'
+      user.invoiceStatus === "paid" &&
+      user.subscriptionStatus === "active"
     ) {
       return true;
     }
-    throw new ForbiddenException('You are not allowed to perform this action');
+    throw new ForbiddenException("You are not allowed to perform this action");
   }
 }

@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { Module } from "@nestjs/common";
+import { APP_FILTER } from "@nestjs/core";
 
-import { CatchAllExceptionsFilter } from 'src/common/http-exception-filters/catch-all.exception-filter';
+import { CatchAllExceptionsFilter } from "src/common/http-exception-filters/catch-all.exception-filter";
 
 @Module({
   providers: [

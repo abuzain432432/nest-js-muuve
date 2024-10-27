@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-import mongoose, { HydratedDocument } from 'mongoose';
-import { TourStatusEnum } from 'src/modules/tour/enums/tour-status.enum';
+import mongoose, { HydratedDocument } from "mongoose";
+import { TourStatusEnum } from "src/modules/tour/enums/tour-status.enum";
 
 export type TourDocument = HydratedDocument<Tour>;
 
@@ -13,13 +13,13 @@ export class Tour {
   @Prop({ type: String, enum: TourStatusEnum, required: true })
   status: TourStatusEnum;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
   tenant: mongoose.Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
   owner: mongoose.Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Property' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Property" })
   property: mongoose.Types.ObjectId;
 
   @Prop({ type: Date, default: Date.now })

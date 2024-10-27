@@ -3,7 +3,7 @@ import {
   ValidationPipe,
   UseFilters,
   BadRequestException,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
   MessageBody,
   SubscribeMessage,
@@ -13,18 +13,18 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   ConnectedSocket,
-} from '@nestjs/websockets';
+} from "@nestjs/websockets";
 
-import { Server, Socket } from 'socket.io';
-import { WsCatchAllExceptionsFilter } from 'src/common/ws-exception-filters/catch-all.exception-filter';
-import { AuthService } from 'src/modules/auth/auth.service';
-import { CreateMessageDto } from 'src/modules/message/dtos/create.dto';
+import { Server, Socket } from "socket.io";
+import { WsCatchAllExceptionsFilter } from "src/common/ws-exception-filters/catch-all.exception-filter";
+import { AuthService } from "src/modules/auth/auth.service";
+import { CreateMessageDto } from "src/modules/message/dtos/create.dto";
 
-import { RedisIoAdapter } from './adapters/redis.adapter';
-import { TypingEventDto } from './dtos/typing-event.dto';
-import { AuthWsMiddleware } from './middlewares/ws-auth.middleware';
-import { AuthenticatedSocket } from './types/socket-io.types';
-import { WSService } from './ws.service';
+import { RedisIoAdapter } from "./adapters/redis.adapter";
+import { TypingEventDto } from "./dtos/typing-event.dto";
+import { AuthWsMiddleware } from "./middlewares/ws-auth.middleware";
+import { AuthenticatedSocket } from "./types/socket-io.types";
+import { WSService } from "./ws.service";
 
 @UseFilters(WsCatchAllExceptionsFilter)
 @UsePipes(
@@ -33,7 +33,7 @@ import { WSService } from './ws.service';
     forbidNonWhitelisted: true,
     transform: true,
     exceptionFactory: (validationErrors = []) => {
-      console.log('VALIDATION FAILED++++++++++++++++++++++');
+      console.log("VALIDATION FAILED++++++++++++++++++++++");
       console.log(validationErrors);
       return new BadRequestException(
         validationErrors.map((error) => Object.values(error.constraints)[0]),
@@ -66,7 +66,7 @@ export class WSGateway
     // Add the socket ID to Redis
     await this.redisIoAdapter
       .getPubClient()
-      .sAdd('connected_clients', socketId);
+      .sAdd("connected_clients", socketId);
     await this.redisIoAdapter.getPubClient().set(`user:${userId}`, socketId);
 
     // console.log(`Set user:${userId} = ${socketId}`);
@@ -83,7 +83,7 @@ export class WSGateway
     // Remove the socket ID from Redis
     await this.redisIoAdapter
       .getPubClient()
-      .sRem('connected_clients', socketId);
+      .sRem("connected_clients", socketId);
     await this.redisIoAdapter.getPubClient().del(`user:${userId}`);
 
     console.log(`Removed user:${userId} = ${socketId}`);
@@ -93,9 +93,9 @@ export class WSGateway
     // );
   }
 
-  @SubscribeMessage('new')
+  @SubscribeMessage("new")
   async handlePrivateMessage(@MessageBody() newMessage: CreateMessageDto) {
-    console.log('+++++++++++++ MESSAGE RECEIVED +++++++++++++++++++');
+    console.log("+++++++++++++ MESSAGE RECEIVED +++++++++++++++++++");
     console.log(newMessage);
 
     const redisKey = `user:${newMessage.receiverId}`;
@@ -107,9 +107,9 @@ export class WSGateway
     await this.wsService.publishMessage(recipientSocketId, newMessage);
   }
   // create a new method to handle the typing event
-  @SubscribeMessage('typing')
+  @SubscribeMessage("typing")
   async handleTypingEvent(@MessageBody() data: TypingEventDto) {
-    console.log('+++++++++++++ TYPING RECEIVED +++++++++++++++++++');
+    console.log("+++++++++++++ TYPING RECEIVED +++++++++++++++++++");
     console.log(data);
 
     const redisKey = `user:${data.receiverId}`;

@@ -3,10 +3,10 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-} from 'class-validator';
-import { RolesEnum } from 'src/common/enums/roles.enum';
+} from "class-validator";
+import { RolesEnum } from "src/common/enums/roles.enum";
 
-@ValidatorConstraint({ name: 'excludeRole', async: false })
+@ValidatorConstraint({ name: "excludeRole", async: false })
 class ExcludeRoleConstraint implements ValidatorConstraintInterface {
   validate(value: any, args: any) {
     const { excludedRole } = args.constraints[0];
@@ -25,7 +25,7 @@ export function ExcludeRole(
 ) {
   return function (object: object, propertyName: string) {
     registerDecorator({
-      name: 'excludeRole',
+      name: "excludeRole",
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
+import { Injectable } from "@nestjs/common";
+import { PassportStrategy } from "@nestjs/passport";
 
-import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { AuthService } from 'src/modules/auth/auth.service';
-import { ConfigService } from 'src/modules/config/config.service';
-import { UserService } from 'src/modules/user/user.service';
+import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
+import { AuthService } from "src/modules/auth/auth.service";
+import { ConfigService } from "src/modules/config/config.service";
+import { UserService } from "src/modules/user/user.service";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
@@ -14,10 +14,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     private userService: UserService,
   ) {
     super({
-      clientID: configService.get('GOOGLE_AUTH_CLIENT_ID'),
-      clientSecret: configService.get('GOOGLE_AUTH_CLIENT_SECRET'),
-      callbackURL: configService.get('GOOGLE_AUTH_CALLBACK_URL'),
-      scope: ['profile', 'email'],
+      clientID: configService.get("GOOGLE_AUTH_CLIENT_ID"),
+      clientSecret: configService.get("GOOGLE_AUTH_CLIENT_SECRET"),
+      callbackURL: configService.get("GOOGLE_AUTH_CALLBACK_URL"),
+      scope: ["profile", "email"],
     });
   }
 

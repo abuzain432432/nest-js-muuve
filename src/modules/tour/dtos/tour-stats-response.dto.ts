@@ -1,5 +1,5 @@
-import { Type, Expose } from 'class-transformer';
-import { IsArray, IsNumber, ValidateNested, IsNotEmpty } from 'class-validator';
+import { Type, Expose } from "class-transformer";
+import { IsArray, IsNumber, ValidateNested, IsNotEmpty } from "class-validator";
 
 export class TourStatsResponseDto {
   @IsArray()

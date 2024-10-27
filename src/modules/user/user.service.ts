@@ -1,10 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
 
-import { Model, SaveOptions } from 'mongoose';
-import { MESSAGES } from 'src/common/messages';
+import { Model, SaveOptions } from "mongoose";
+import { MESSAGES } from "src/common/messages";
 
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument } from "./schemas/user.schema";
 
 @Injectable()
 export class UserService {
@@ -67,7 +67,7 @@ export class UserService {
       { tfaRecoveryToken: token },
       {
         $set: {
-          tfaRecoveryToken: '',
+          tfaRecoveryToken: "",
           tfa: false,
         },
       },

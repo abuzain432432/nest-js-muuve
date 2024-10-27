@@ -1,14 +1,14 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
-import { HydratedDocument, Types } from 'mongoose';
-import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-import { Property } from 'src/modules/property/schemas/property.schema';
+import { HydratedDocument, Types } from "mongoose";
+import { AuthProvidersEnum } from "src/common/enums/auth-providers.enum";
+import { RolesEnum } from "src/common/enums/roles.enum";
+import { Property } from "src/modules/property/schemas/property.schema";
 import {
   addUserMethods,
   UserMethodsType,
-} from 'src/modules/user/schemas-methods/user.schema-methods';
-import { userSchemaMiddleware } from 'src/modules/user/schemas-middleware/user.schema-middleware';
+} from "src/modules/user/schemas-methods/user.schema-methods";
+import { userSchemaMiddleware } from "src/modules/user/schemas-middleware/user.schema-middleware";
 
 export type UserDocument = HydratedDocument<User> & UserMethodsType;
 
@@ -32,7 +32,7 @@ export class User {
       validator: function (this: User, value: string) {
         return value === this.password;
       },
-      message: 'Password and confirm password do not match',
+      message: "Password and confirm password do not match",
     },
   })
   // TODO you still storing it a plain text in the database either hash it or remove it in the middleware
@@ -42,7 +42,7 @@ export class User {
   email: string;
 
   @Prop({
-    type: [{ type: Types.ObjectId, ref: 'Property' }],
+    type: [{ type: Types.ObjectId, ref: "Property" }],
     default: [],
   })
   properties: Property[];
@@ -53,7 +53,7 @@ export class User {
   @Prop({ type: String, enum: AuthProvidersEnum, required: true })
   provider: AuthProvidersEnum;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   otp: string;
 
   @Prop({ type: Date, default: null })
@@ -65,30 +65,30 @@ export class User {
   @Prop({ default: false })
   tfa: boolean;
 
-  @Prop({ default: '' })
+  @Prop({ default: "" })
   tfaSecret: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: "" })
   tfaRecoveryToken: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   subscriptionId: string;
   @Prop({ type: Date, default: null })
   currentPeriodEnd: Date;
   @Prop({ type: Date, default: null })
   currentPeriodStart: Date;
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   customerId: string;
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   planName: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   interval: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   subscriptionStatus: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: "" })
   invoiceStatus: string;
 }
 

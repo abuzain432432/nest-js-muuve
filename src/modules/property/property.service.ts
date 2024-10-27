@@ -1,14 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
 
-import { Model } from 'mongoose';
-import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
-import { IUser } from 'src/common/types/user.type';
+import { Model } from "mongoose";
+import { transformToDto } from "src/common/lib/transform-to-dto.lib";
+import { IUser } from "src/common/types/user.type";
 
-import { CreatePropertyDto } from './dtos/create-property.dto';
-import { PropertyStatsResponseDto } from './dtos/property-stats-response.dto';
-import { PropertyStatusEnum } from './enums/property-status.enum';
-import { Property, PropertyDocument } from './schemas/property.schema';
+import { CreatePropertyDto } from "./dtos/create-property.dto";
+import { PropertyStatsResponseDto } from "./dtos/property-stats-response.dto";
+import { PropertyStatusEnum } from "./enums/property-status.enum";
+import { Property, PropertyDocument } from "./schemas/property.schema";
 
 @Injectable()
 export class PropertyService {
@@ -23,7 +23,7 @@ export class PropertyService {
       status: PropertyStatusEnum.DRAFT,
       owner: user._id,
       location: {
-        type: 'Point',
+        type: "Point",
         coordinates: [
           data.location.coordinates[0],
           data.location.coordinates[1],
@@ -52,7 +52,7 @@ export class PropertyService {
     );
 
     if (!publishedProperty) {
-      throw new NotFoundException('Property not found');
+      throw new NotFoundException("Property not found");
     }
     return publishedProperty;
   }
@@ -81,21 +81,21 @@ export class PropertyService {
       {
         $group: {
           _id: {
-            month: { $month: '$createdAt' },
+            month: { $month: "$createdAt" },
             // month: { $month: '$listedAt' },
-            status: '$status',
+            status: "$status",
           },
           count: { $sum: 1 },
         },
       },
       {
         $group: {
-          _id: '$_id.month',
+          _id: "$_id.month",
           available: {
             $sum: {
               $cond: [
-                { $eq: ['$_id.status', PropertyStatusEnum.AVAILABLE] },
-                '$count',
+                { $eq: ["$_id.status", PropertyStatusEnum.AVAILABLE] },
+                "$count",
                 0,
               ],
             },
@@ -103,8 +103,8 @@ export class PropertyService {
           occupied: {
             $sum: {
               $cond: [
-                { $eq: ['$_id.status', PropertyStatusEnum.OCCUPIED] },
-                '$count',
+                { $eq: ["$_id.status", PropertyStatusEnum.OCCUPIED] },
+                "$count",
                 0,
               ],
             },
@@ -112,8 +112,8 @@ export class PropertyService {
           pendingPayment: {
             $sum: {
               $cond: [
-                { $eq: ['$_id.status', PropertyStatusEnum.PENDING_PAYMENT] },
-                '$count',
+                { $eq: ["$_id.status", PropertyStatusEnum.PENDING_PAYMENT] },
+                "$count",
                 0,
               ],
             },
@@ -121,8 +121,8 @@ export class PropertyService {
           draft: {
             $sum: {
               $cond: [
-                { $eq: ['$_id.status', PropertyStatusEnum.DRAFT] },
-                '$count',
+                { $eq: ["$_id.status", PropertyStatusEnum.DRAFT] },
+                "$count",
                 0,
               ],
             },
@@ -131,7 +131,7 @@ export class PropertyService {
       },
       {
         $project: {
-          month: '$_id',
+          month: "$_id",
           available: 1,
           occupied: 1,
           pending: 1,
