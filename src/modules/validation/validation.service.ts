@@ -1,6 +1,6 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException } from '@nestjs/common';
 
-import { validateOrReject } from "class-validator";
+import { validateOrReject } from 'class-validator';
 
 @Injectable()
 export class ValidationService {
@@ -10,7 +10,7 @@ export class ValidationService {
       await validateOrReject(dto);
     } catch (errors) {
       // TODO use the logger service to log the errors and send the errors to the sentry and hence to slack channel and use data, error.message to log the error
-      throw new BadRequestException("Validation failed", errors);
+      throw new BadRequestException('Validation failed', errors);
     }
   }
 }

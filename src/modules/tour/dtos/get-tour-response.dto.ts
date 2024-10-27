@@ -1,6 +1,6 @@
-import { Expose } from "class-transformer";
+import { Expose } from 'class-transformer';
 
-import { TourStatusEnum } from "../enums/tour-status.enum";
+import { TourStatusEnum } from '../enums/tour-status.enum';
 
 export class GetTourResponseDto {
   @Expose()

@@ -8,30 +8,30 @@ import {
   Req,
   RawBodyRequest,
   Headers,
-} from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
-import { Roles } from "src/common/decorators/roles.decorator";
-import { RolesEnum } from "src/common/enums/roles.enum";
-import { RolesGuard } from "src/common/guards/roles.guard";
-import { IRequest } from "src/common/types/request.type";
-import { JwtAuthGuard } from "src/modules/auth/guards/jwt-auth.guard";
-import Stripe from "stripe";
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesEnum } from 'src/common/enums/roles.enum';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { IRequest } from 'src/common/types/request.type';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import Stripe from 'stripe';
 
-import { CreateListingFeeCheckoutDto } from "./dtos/create-listing-fee-checkout.dto";
-import { CreateSubscriptionSessionDto } from "./dtos/create-subscription-session.dto";
-import { StripeEventsTypesEnum } from "./enums/stripe-events.enum";
-import PaymentService from "./payment.service";
+import { CreateListingFeeCheckoutDto } from './dtos/create-listing-fee-checkout.dto';
+import { CreateSubscriptionSessionDto } from './dtos/create-subscription-session.dto';
+import { StripeEventsTypesEnum } from './enums/stripe-events.enum';
+import PaymentService from './payment.service';
 
-@ApiTags("payments")
-@Controller("payments")
+@ApiTags('payments')
+@Controller('payments')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
-  @Get("subscriptions/plans")
+  @Get('subscriptions/plans')
   findAllMessagesOfAConversation() {
     return this.paymentService.getPricingPlans();
   }
-  @Post("subscriptions")
+  @Post('subscriptions')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([RolesEnum.AGENT])
   createSubscriptionSession(
@@ -41,7 +41,7 @@ export class PaymentController {
     return this.paymentService.createSubscriptionSession(data, req.user);
   }
 
-  @Post("listing-fee")
+  @Post('listing-fee')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([RolesEnum.LANDLORD])
   createListingFeeCheckout(
@@ -51,7 +51,7 @@ export class PaymentController {
     return this.paymentService.createListingFeeCheckout(data, req.user);
   }
 
-  @Get("customer-portal")
+  @Get('customer-portal')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles([RolesEnum.AGENT])
   async getCustomerPortalUrl(@Request() req: IRequest) {
@@ -60,16 +60,16 @@ export class PaymentController {
     return data;
   }
 
-  @Post("hooks")
+  @Post('hooks')
   async handleStripeWebhook(
     @Req() req: RawBodyRequest<Request>,
-    @Headers("stripe-signature") sig: string,
+    @Headers('stripe-signature') sig: string,
   ) {
     const session = this.paymentService.constructEvent(req.rawBody, sig);
     const eventType = session.type as StripeEventsTypesEnum;
-    console.log("#_____________ RECEIVED EVENT _____________#");
+    console.log('#_____________ RECEIVED EVENT _____________#');
     console.log(eventType);
-    console.log("#__________________________________________#");
+    console.log('#__________________________________________#');
 
     switch (eventType) {
       case StripeEventsTypesEnum.InvoicePaymentFailed:
@@ -98,9 +98,9 @@ export class PaymentController {
         );
         break;
       default:
-        console.log("#__________________________#");
-        console.log("Unhandled event", eventType);
-        console.log("#__________________________#");
+        console.log('#__________________________#');
+        console.log('Unhandled event', eventType);
+        console.log('#__________________________#');
     }
   }
 }

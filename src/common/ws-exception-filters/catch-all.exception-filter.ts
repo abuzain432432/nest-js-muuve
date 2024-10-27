@@ -4,8 +4,8 @@ import {
   ExceptionFilter,
   HttpException,
   Logger,
-} from "@nestjs/common";
-import { WsException } from "@nestjs/websockets";
+} from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
 
 @Catch()
 export class WsCatchAllExceptionsFilter implements ExceptionFilter {
@@ -18,8 +18,8 @@ export class WsCatchAllExceptionsFilter implements ExceptionFilter {
 
     let message: string;
 
-    this.logger.error("WebSocket Exception:", exception);
-    console.log("++++++++++++++++++++++++++++");
+    this.logger.error('WebSocket Exception:', exception);
+    console.log('++++++++++++++++++++++++++++');
 
     // Check if the exception is a MongoDB duplicate key error
     if (exception instanceof Error && (exception as any).code === 11000) {
@@ -34,22 +34,22 @@ export class WsCatchAllExceptionsFilter implements ExceptionFilter {
     else if (exception instanceof HttpException) {
       const response = exception.getResponse();
       message =
-        typeof response === "string"
+        typeof response === 'string'
           ? response
           : (response as any).message || exception.message;
     } else {
-      message = "Internal server error";
+      message = 'Internal server error';
     }
 
     // Define the response structure to send to the client
     const responseBody = {
-      status: "error",
+      status: 'error',
       message,
       timestamp: new Date().toISOString(),
       data,
     };
 
     // Emit the error message back to the client
-    client.emit("exception", responseBody);
+    client.emit('exception', responseBody);
   }
 }

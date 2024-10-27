@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
-import { Property } from "src/modules/property/schemas/property.schema";
+import { Expose } from 'class-transformer';
+import { Property } from 'src/modules/property/schemas/property.schema';
 
 export class UserResponseDto {
   @Expose()

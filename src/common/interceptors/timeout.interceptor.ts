@@ -4,11 +4,11 @@ import {
   ExecutionContext,
   CallHandler,
   RequestTimeoutException,
-} from "@nestjs/common";
+} from '@nestjs/common';
 
-import { Request } from "express";
-import { Observable, throwError, TimeoutError } from "rxjs";
-import { catchError, timeout } from "rxjs/operators";
+import { Request } from 'express';
+import { Observable, throwError, TimeoutError } from 'rxjs';
+import { catchError, timeout } from 'rxjs/operators';
 /**
  * IF you want to customize the timeoutTime period pass an instance
  *

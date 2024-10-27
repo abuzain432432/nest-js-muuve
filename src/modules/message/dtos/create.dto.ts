@@ -4,7 +4,7 @@ import {
   IsOptional,
   IsNotEmpty,
   IsObject,
-} from "class-validator";
+} from 'class-validator';
 
 export class CreateMessageDto {
   @IsString()

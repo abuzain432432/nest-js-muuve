@@ -1,22 +1,22 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { HydratedDocument } from "mongoose";
-import mongoose from "mongoose";
+import { HydratedDocument } from 'mongoose';
+import mongoose from 'mongoose';
 
 export type MessageDocument = HydratedDocument<Message>;
 
 @Schema({ timestamps: true })
 export class Message {
-  @Prop({ type: String, ref: "Message" })
+  @Prop({ type: String, ref: 'Message' })
   parentIdMessage: string;
 
-  @Prop({ type: String, ref: "Conversation" })
+  @Prop({ type: String, ref: 'Conversation' })
   conversationId: string;
 
-  @Prop({ type: String, ref: "User" })
+  @Prop({ type: String, ref: 'User' })
   senderId: string;
 
-  @Prop({ type: String, ref: "User" })
+  @Prop({ type: String, ref: 'User' })
   receiverId: string;
 
   @Prop()

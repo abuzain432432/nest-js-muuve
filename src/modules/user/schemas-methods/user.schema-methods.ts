@@ -1,5 +1,5 @@
-import * as bcrypt from "bcryptjs";
-import { Schema } from "mongoose";
+import * as bcrypt from 'bcryptjs';
+import { Schema } from 'mongoose';
 
 export function addUserMethods(schema: Schema) {
   schema.methods.correctPassword = async function (

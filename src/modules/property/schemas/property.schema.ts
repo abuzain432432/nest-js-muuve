@@ -1,8 +1,8 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import mongoose, { HydratedDocument } from "mongoose";
-import { PropertyStatusEnum } from "src/modules/property/enums/property-status.enum";
-import { PropertyTypeEnum } from "src/modules/property/enums/property-type-enum";
+import mongoose, { HydratedDocument } from 'mongoose';
+import { PropertyStatusEnum } from 'src/modules/property/enums/property-status.enum';
+import { PropertyTypeEnum } from 'src/modules/property/enums/property-type-enum';
 
 export type PropertyDocument = HydratedDocument<Property>;
 
@@ -53,36 +53,36 @@ export class Property {
     to: Date;
   };
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
   favoritesBy: mongoose.Types.ObjectId[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: mongoose.Types.ObjectId;
 
   @Prop({
-    type: { type: String, enum: ["Point"], default: "Point" },
-    coordinates: { type: [Number], required: true, index: "2dsphere" },
+    type: { type: String, enum: ['Point'], default: 'Point' },
+    coordinates: { type: [Number], required: true, index: '2dsphere' },
   })
   location: {
-    type: "Point";
+    type: 'Point';
     coordinates: [number, number];
   };
 
   @Prop({
     type: {
       cShape: {
-        type: { type: String, enum: ["Polygon"], required: true },
+        type: { type: String, enum: ['Polygon'], required: true },
         coordinates: { type: [[Number]], required: true },
       },
       pShape: {
-        type: { type: String, enum: ["Polygon"], required: true },
+        type: { type: String, enum: ['Polygon'], required: true },
         coordinates: { type: [[Number]], required: true },
       },
     },
   })
   shapes: {
-    cShape: { type: "Polygon"; coordinates: number[][][] };
-    pShape: { type: "Polygon"; coordinates: number[][][] };
+    cShape: { type: 'Polygon'; coordinates: number[][][] };
+    pShape: { type: 'Polygon'; coordinates: number[][][] };
   };
 
   @Prop()
@@ -112,7 +112,7 @@ export class Property {
   @Prop({ default: 0 })
   dogsLimit: number;
 
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   petsComment: string;
 
   @Prop({ default: false })

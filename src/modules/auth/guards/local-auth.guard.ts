@@ -3,14 +3,14 @@ import {
   ExecutionContext,
   HttpStatus,
   HttpException,
-} from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
-import { IRequest } from "src/common/types/request.type";
-import { AuthService } from "src/modules/auth/auth.service";
+import { IRequest } from 'src/common/types/request.type';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 @Injectable()
-export class LocalAuthGuard extends AuthGuard("local") {
+export class LocalAuthGuard extends AuthGuard('local') {
   constructor(private readonly authService: AuthService) {
     super();
   }
@@ -27,12 +27,12 @@ export class LocalAuthGuard extends AuthGuard("local") {
     if (user.tfa) {
       const otp = request.body.otp;
       if (!otp) {
-        throw new HttpException("2FA token required", HttpStatus.FORBIDDEN);
+        throw new HttpException('2FA token required', HttpStatus.FORBIDDEN);
       }
 
       const isValid = this.authService.verifyMfaToken(user.tfaSecret, otp);
       if (!isValid) {
-        throw new HttpException("Invalid 2FA token", HttpStatus.FORBIDDEN);
+        throw new HttpException('Invalid 2FA token', HttpStatus.FORBIDDEN);
       }
     }
     return true;

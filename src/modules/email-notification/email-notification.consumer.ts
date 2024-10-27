@@ -1,16 +1,16 @@
-import { Processor, WorkerHost, OnWorkerEvent } from "@nestjs/bullmq";
+import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
 
-import * as sgMail from "@sendgrid/mail";
-import { Job } from "bullmq";
+import * as sgMail from '@sendgrid/mail';
+import { Job } from 'bullmq';
 import {
   ACTIVATE_ACCOUNT_QUEUE_JOB_NAME,
   EMAIL_NOTIFICATION_QUEUE_NAME,
-} from "src/common/constants";
-import { ActivateAccountEmailDto } from "src/common/dtos/activateAccountEmail.dto";
-import { EmailService } from "src/modules/email/email.service";
+} from 'src/common/constants';
+import { ActivateAccountEmailDto } from 'src/common/dtos/activateAccountEmail.dto';
+import { EmailService } from 'src/modules/email/email.service';
 // import { EmailTemplateIdsEnum } from 'src/common/enums/email-template-ids.enum';
 
-import { ConfigService } from "../config/config.service";
+import { ConfigService } from '../config/config.service';
 
 @Processor(EMAIL_NOTIFICATION_QUEUE_NAME)
 export class EmailNotificationConsumer extends WorkerHost {
@@ -19,7 +19,7 @@ export class EmailNotificationConsumer extends WorkerHost {
     private readonly configService: ConfigService,
   ) {
     super();
-    sgMail.setApiKey(configService.get("SEND_GRID_API_KEY"));
+    sgMail.setApiKey(configService.get('SEND_GRID_API_KEY'));
   }
   async sendMail(
     to: string,
@@ -32,13 +32,13 @@ export class EmailNotificationConsumer extends WorkerHost {
       // NOTE add check if current environment is not production then send to the mailosaur email address but for now we don't have the mailosaur account
       // to: this.configService.get('MAILOSAUR_EMAIL'),
       to,
-      from: this.configService.get("SENDER_EMAIL"),
+      from: this.configService.get('SENDER_EMAIL'),
       subject,
       text,
       html,
       headers,
     };
-    console.log("++++++++++++++++++++++++++");
+    console.log('++++++++++++++++++++++++++');
     console.log(msg);
 
     // await sgMail.send(msg);
@@ -50,14 +50,14 @@ export class EmailNotificationConsumer extends WorkerHost {
         case ACTIVATE_ACCOUNT_QUEUE_JOB_NAME:
           return this.processActivateAccount(job.data);
         default:
-          throw new Error("Unknown job name");
+          throw new Error('Unknown job name');
       }
     } catch (error) {
       //NOTE  Ensure the error is propagated for the @OnWorkerEvent handler
       throw error;
     }
   }
-  @OnWorkerEvent("failed")
+  @OnWorkerEvent('failed')
   onFail(job: Job) {
     return this.onJobFail(job);
   }
@@ -67,7 +67,7 @@ export class EmailNotificationConsumer extends WorkerHost {
     //   { templateId: EmailTemplateIdsEnum.ActivateAccount },
     //   data,
     // );
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
     console.log(data);
     // const template = {
     //   subject: `Activate Account for ${data.email}`,
@@ -81,11 +81,11 @@ export class EmailNotificationConsumer extends WorkerHost {
    **/
   onJobFail(job: Job) {
     // TODO use the logger service to log the errors and send the errors to the sentry and hence to slack channel and use data, error.message to log the error
-    console.log("++++++++++++++++++++++++++++++++++++++++++");
-    console.log("ATTEMPT NO", job.attemptsMade);
-    console.error("JOB Name", job.name);
-    console.log("JOB DATA", job.data);
-    console.error("Error Message:", job.failedReason); // The error message
+    console.log('++++++++++++++++++++++++++++++++++++++++++');
+    console.log('ATTEMPT NO', job.attemptsMade);
+    console.error('JOB Name', job.name);
+    console.log('JOB DATA', job.data);
+    console.error('Error Message:', job.failedReason); // The error message
     // console.error('Error Stack:', job.stacktrace); // The error stack trace (if available)
   }
 }

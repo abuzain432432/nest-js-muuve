@@ -1,4 +1,4 @@
-import { Reflector } from "@nestjs/core";
+import { Reflector } from '@nestjs/core';
 
 /**
  * This decorator is used to bypass the profile check for a handler

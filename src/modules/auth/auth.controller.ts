@@ -8,7 +8,7 @@ import {
   Request,
   Param,
   Patch,
-} from "@nestjs/common";
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOkResponse,
@@ -17,35 +17,35 @@ import {
   ApiBadRequestResponse,
   ApiUnauthorizedResponse,
   ApiExcludeEndpoint,
-} from "@nestjs/swagger";
+} from '@nestjs/swagger';
 
-import { BypassProfileCompleteCheck } from "src/common/decorators/bypass-profile-complete-check.decorator";
-import { BypassUserActiveCheck } from "src/common/decorators/bypass-user-active-check.decorator";
-import { UserResponseDto } from "src/common/dtos/user-response.dto";
-import { MESSAGES } from "src/common/messages";
-import { IRequest } from "src/common/types/request.type";
+import { BypassProfileCompleteCheck } from 'src/common/decorators/bypass-profile-complete-check.decorator';
+import { BypassUserActiveCheck } from 'src/common/decorators/bypass-user-active-check.decorator';
+import { UserResponseDto } from 'src/common/dtos/user-response.dto';
+import { MESSAGES } from 'src/common/messages';
+import { IRequest } from 'src/common/types/request.type';
 
-import { AuthService } from "./auth.service";
-import { CompleteGoogleProfileDto } from "./dtos/complete-google-profile-dto";
-import { RecoverTfaDto } from "./dtos/recover-tfa.dto";
-import { SignupDto } from "./dtos/signup.dto";
-import { GoogleAuthGuard } from "./guards/google-auth.guard";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { LocalAuthGuard } from "./guards/local-auth.guard";
-import { LoginSwagger } from "./swagger/login.swagger";
+import { AuthService } from './auth.service';
+import { CompleteGoogleProfileDto } from './dtos/complete-google-profile-dto';
+import { RecoverTfaDto } from './dtos/recover-tfa.dto';
+import { SignupDto } from './dtos/signup.dto';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LoginSwagger } from './swagger/login.swagger';
 
-@ApiTags("Auth")
-@Controller("auth")
+@ApiTags('Auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Get("google/login")
+  @Get('google/login')
   @ApiBadRequestResponse({
     example: { message: MESSAGES.EMAIL_ASSOCIATED_WITH_OTHER_AUTH_METHOD },
   })
   @UseGuards(GoogleAuthGuard)
   handleLogin() {}
 
-  @Get("google/redirect")
+  @Get('google/redirect')
   @ApiExcludeEndpoint()
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@Res() res, @Request() req: IRequest) {
@@ -60,26 +60,26 @@ export class AuthController {
   }
 
   @UseGuards(LocalAuthGuard)
-  @Post("/login")
+  @Post('/login')
   @LoginSwagger()
   login(@Request() req: IRequest) {
     return this.authService.login(req.user);
   }
 
-  @Post("/signup")
+  @Post('/signup')
   @ApiCreatedResponse({
-    description: "Success",
-    example: { message: MESSAGES.SIGNUP_SUCCESS, token: "xyz" },
+    description: 'Success',
+    example: { message: MESSAGES.SIGNUP_SUCCESS, token: 'xyz' },
   })
   signup(@Body() data: SignupDto) {
     return this.authService.signup(data);
   }
 
-  @Get("me")
+  @Get('me')
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
-    description: "Unauthorized",
-    example: { message: "Unauthorized" },
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
   })
   @UseGuards(JwtAuthGuard)
   @BypassUserActiveCheck(true)
@@ -88,15 +88,15 @@ export class AuthController {
     return this.authService.getProfile(req.user);
   }
 
-  @Post("/google/complete-profile")
+  @Post('/google/complete-profile')
   @BypassProfileCompleteCheck(true)
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
-    description: "Unauthorized",
-    example: { message: "Unauthorized" },
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
   })
   @ApiOkResponse({
-    description: "Success",
+    description: 'Success',
     example: {
       message: MESSAGES.PROFILE_UPDATED,
     },
@@ -112,83 +112,83 @@ export class AuthController {
     );
   }
 
-  @Get("/qrcode-tfa")
+  @Get('/qrcode-tfa')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiBadRequestResponse({
-    description: "Failed",
+    description: 'Failed',
     example: { message: MESSAGES.TWO_FACTOR_SERVICE_NOT_AVAILABLE },
   })
   @ApiOkResponse({
-    description: "Success",
-    example: { url: "data:image/png;base64,...." },
+    description: 'Success',
+    example: { url: 'data:image/png;base64,....' },
   })
   @ApiUnauthorizedResponse({
-    description: "Unauthorized",
-    example: { message: "Unauthorized" },
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
   })
   async getTfaQrCode(@Request() req: IRequest) {
     const data = await this.authService.generateQrCode(req.user);
     return data;
   }
 
-  @Get("/enable-tfa/:token")
+  @Get('/enable-tfa/:token')
   @ApiBearerAuth()
   @ApiBadRequestResponse({
-    description: "Invalid token",
+    description: 'Invalid token',
     example: {
       message: MESSAGES.INVALID_OTP_TOKEN,
     },
   })
   @ApiOkResponse({
-    description: "Success",
+    description: 'Success',
     example: {
       message: MESSAGES.TWO_FACTOR_ENABLED_SUCCESS,
-      recoveryToken: "xyz",
+      recoveryToken: 'xyz',
     },
   })
   @ApiUnauthorizedResponse({
-    description: "Unauthorized",
-    example: { message: "Unauthorized" },
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
   })
   @UseGuards(JwtAuthGuard)
-  async enableTfa(@Param("token") token: string, @Request() req: IRequest) {
+  async enableTfa(@Param('token') token: string, @Request() req: IRequest) {
     return await this.authService.enableTfa(req.user, token);
   }
 
-  @Get("/disable-tfa/:token")
+  @Get('/disable-tfa/:token')
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
-    description: "Unauthorized",
-    example: { message: "Unauthorized" },
+    description: 'Unauthorized',
+    example: { message: 'Unauthorized' },
   })
   @ApiBadRequestResponse({
-    description: "Invalid token",
+    description: 'Invalid token',
     example: {
       message: MESSAGES.INVALID_OTP_TOKEN,
     },
   })
   @ApiOkResponse({
-    description: "Success",
+    description: 'Success',
     example: {
       message: MESSAGES.TWO_FACTOR_DISABLED_SUCCESS,
-      recoveryToken: "xyz",
+      recoveryToken: 'xyz',
     },
   })
   @UseGuards(JwtAuthGuard)
-  async disableTfa(@Param("token") token: string, @Request() req: IRequest) {
+  async disableTfa(@Param('token') token: string, @Request() req: IRequest) {
     return await this.authService.disableTfa(req.user, token);
   }
 
-  @Patch("/recover-2fa")
+  @Patch('/recover-2fa')
   @ApiBadRequestResponse({
-    description: "Invalid token",
+    description: 'Invalid token',
     example: {
       message: MESSAGES.INVALID_OTP_TOKEN,
     },
   })
   @ApiOkResponse({
-    description: "Success",
+    description: 'Success',
     example: {
       message: MESSAGES.TWO_FACTOR_DISABLED_SUCCESS,
     },
@@ -196,15 +196,15 @@ export class AuthController {
   async recoverTfa(@Body() data: RecoverTfaDto) {
     return await this.authService.recoverTfa(data.recoveryToken);
   }
-  @Get("/activate/:token")
+  @Get('/activate/:token')
   @ApiOkResponse({
-    description: "Success",
+    description: 'Success',
     example: {
       message: MESSAGES.ACCOUNT_ACTIVATED,
     },
   })
   @ApiBadRequestResponse({ example: { message: MESSAGES.INVALID_OTP_TOKEN } })
-  activateAccount(@Param("token") token: string) {
+  activateAccount(@Param('token') token: string) {
     return this.authService.activateAccount(token);
   }
 }

@@ -1,31 +1,31 @@
-import * as crypto from "crypto";
+import * as crypto from 'crypto';
 
 import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
-} from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
-import { plainToInstance } from "class-transformer";
-import { Response } from "express";
-import { Request } from "express";
-import * as qrcode from "qrcode";
-import * as speakeasy from "speakeasy";
-import { UserResponseDto } from "src/common/dtos/user-response.dto";
-import { AuthProvidersEnum } from "src/common/enums/auth-providers.enum";
-import { createHashVerifier } from "src/common/lib/en-decryption.lib";
-import { transformToDto } from "src/common/lib/transform-to-dto.lib";
-import { MESSAGES } from "src/common/messages";
-import { AuthPayloadType } from "src/common/types/auth.types";
-import { IUser } from "src/common/types/user.type";
-import { ConfigService } from "src/modules/config/config.service";
-import { EmailNotificationService } from "src/modules/email-notification/email-notification.service";
-import { UserService } from "src/modules/user/user.service";
-import { v4 as uuidv4 } from "uuid";
+import { plainToInstance } from 'class-transformer';
+import { Response } from 'express';
+import { Request } from 'express';
+import * as qrcode from 'qrcode';
+import * as speakeasy from 'speakeasy';
+import { UserResponseDto } from 'src/common/dtos/user-response.dto';
+import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
+import { createHashVerifier } from 'src/common/lib/en-decryption.lib';
+import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
+import { MESSAGES } from 'src/common/messages';
+import { AuthPayloadType } from 'src/common/types/auth.types';
+import { IUser } from 'src/common/types/user.type';
+import { ConfigService } from 'src/modules/config/config.service';
+import { EmailNotificationService } from 'src/modules/email-notification/email-notification.service';
+import { UserService } from 'src/modules/user/user.service';
+import { v4 as uuidv4 } from 'uuid';
 
-import { CompleteGoogleProfileDto } from "./dtos/complete-google-profile-dto";
-import { SignupDto } from "./dtos/signup.dto";
+import { CompleteGoogleProfileDto } from './dtos/complete-google-profile-dto';
+import { SignupDto } from './dtos/signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,18 +36,18 @@ export class AuthService {
     private emailNotificationService: EmailNotificationService,
   ) {}
   extractTokenFromRequest(request: Request): string | undefined {
-    const authHeader = request.headers["authorization"];
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      return authHeader.split(" ")[1];
+    const authHeader = request.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      return authHeader.split(' ')[1];
     }
-    return request.signedCookies["auth_token"];
+    return request.signedCookies['auth_token'];
   }
 
   async validateTokenAndGetUser(token: string) {
     const userId = await this.validateTokenAndGetId(token);
     const user = await this.userService.findOneById(userId);
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      throw new UnauthorizedException('User not found');
     }
     return plainToInstance(UserResponseDto, user.toObject());
   }
@@ -57,7 +57,7 @@ export class AuthService {
   ) {
     const user = await this.userService.findOneById(userId);
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      throw new UnauthorizedException('User not found');
     }
     await this.userService.update(userId, {
       ...data,
@@ -66,13 +66,13 @@ export class AuthService {
   }
   private async validateTokenAndGetId(token: string) {
     const payload = await this.jwtService.verifyAsync<AuthPayloadType>(token, {
-      secret: this.configService.get("JWT_SECRET"),
+      secret: this.configService.get('JWT_SECRET'),
     });
     return payload.sub;
   }
 
   deleteAuthCookie(response: Response) {
-    response.clearCookie("auth_token", {
+    response.clearCookie('auth_token', {
       httpOnly: true,
       secure: true,
       signed: true,
@@ -82,7 +82,7 @@ export class AuthService {
   // Method to set authentication cookie
   setAuthCookie(res: Response, token: string) {
     const jwtCookieExpiryTime = this.configService.getJwtCookieExpiryTime();
-    res.cookie("auth_token", token, {
+    res.cookie('auth_token', token, {
       httpOnly: true,
       secure: true,
       signed: true,
@@ -99,7 +99,7 @@ export class AuthService {
   }
 
   createOtp = async function () {
-    const otpToken = crypto.randomBytes(3).toString("hex").toUpperCase();
+    const otpToken = crypto.randomBytes(3).toString('hex').toUpperCase();
     const hashedOtp = createHashVerifier(otpToken);
     const otpExpiresAt = Date.now() + 30 * 60 * 1000; // 30 minutes
     return { otpToken, hashedOtp, otpExpiresAt };
@@ -162,7 +162,7 @@ export class AuthService {
   }
 
   async activateAccount(token: string) {
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
     console.log(token);
     const hashedToken = await createHashVerifier(token);
     const user = await this.userService.findOneByOtp(hashedToken);
@@ -173,7 +173,7 @@ export class AuthService {
   }
 
   async generateQrCode(user: IUser) {
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
     console.log(user);
     // TODO will need to rethink this logic
     if (user.provider !== AuthProvidersEnum.CUSTOM) {
@@ -190,14 +190,14 @@ export class AuthService {
     const otpAuthUrl = speakeasy.otpauthURL({
       secret: secret.base32,
       label: `Muuve (${user.email})`,
-      encoding: "base32",
+      encoding: 'base32',
     });
 
     await this.userService.saveTfaSecret(user._id, secret.base32);
     return { url: (await qrcode.toDataURL(otpAuthUrl)) as string };
   }
   verifyMfaToken(secret: string, token: string): boolean {
-    return speakeasy.totp.verify({ secret, encoding: "base32", token });
+    return speakeasy.totp.verify({ secret, encoding: 'base32', token });
   }
   async enableTfa(user: IUser, token: string) {
     // TODO will need to send an email to the user with the recovery token
@@ -226,7 +226,7 @@ export class AuthService {
     if (!isValid) {
       throw new BadRequestException(MESSAGES.INVALID_OTP_TOKEN);
     }
-    await this.userService.update(user._id, { tfa: false, tfaSecret: "" });
+    await this.userService.update(user._id, { tfa: false, tfaSecret: '' });
     return { message: MESSAGES.TWO_FACTOR_DISABLED_SUCCESS };
   }
 

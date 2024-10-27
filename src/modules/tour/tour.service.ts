@@ -2,23 +2,23 @@ import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
-} from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { plainToInstance } from "class-transformer";
-import { Model } from "mongoose";
-import { RolesEnum } from "src/common/enums/roles.enum";
-import { dateRanges } from "src/common/lib/date-ranges";
-import { transformToDto } from "src/common/lib/transform-to-dto.lib";
-import { MESSAGES } from "src/common/messages";
-import { IUser } from "src/common/types/user.type";
+import { plainToInstance } from 'class-transformer';
+import { Model } from 'mongoose';
+import { RolesEnum } from 'src/common/enums/roles.enum';
+import { dateRanges } from 'src/common/lib/date-ranges';
+import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
+import { MESSAGES } from 'src/common/messages';
+import { IUser } from 'src/common/types/user.type';
 
-import { CreateTourDto } from "./dtos/create-tour.dto";
-import { GetTourResponseDto } from "./dtos/get-tour-response.dto";
-import { GetToursResponseDto } from "./dtos/get-tours-response.dto";
-import { TourStatsResponseDto } from "./dtos/tour-stats-response.dto";
-import { TourStatusEnum } from "./enums/tour-status.enum";
-import { Tour, TourDocument } from "./schemas/tour.schema";
+import { CreateTourDto } from './dtos/create-tour.dto';
+import { GetTourResponseDto } from './dtos/get-tour-response.dto';
+import { GetToursResponseDto } from './dtos/get-tours-response.dto';
+import { TourStatsResponseDto } from './dtos/tour-stats-response.dto';
+import { TourStatusEnum } from './enums/tour-status.enum';
+import { Tour, TourDocument } from './schemas/tour.schema';
 
 @Injectable()
 export class TourService {
@@ -50,13 +50,13 @@ export class TourService {
     const tour = await this.tourModel.findById(tourId);
 
     if (!tour) {
-      throw new BadRequestException("Tour not found");
+      throw new BadRequestException('Tour not found');
     }
     if (tour.owner.toString() !== user._id.toString()) {
       throw new UnauthorizedException(MESSAGES.UNAUTHORIZED_ACTION);
     }
     if (tour.status !== TourStatusEnum.PENDING) {
-      throw new BadRequestException("You can only reject pending tours");
+      throw new BadRequestException('You can only reject pending tours');
     }
     tour.status = status;
     await tour.save();
@@ -110,20 +110,20 @@ export class TourService {
       {
         $group: {
           _id: {
-            month: { $month: "$createdAt" },
-            status: "$status",
+            month: { $month: '$createdAt' },
+            status: '$status',
           },
           count: { $sum: 1 },
         },
       },
       {
         $group: {
-          _id: "$_id.month",
+          _id: '$_id.month',
           accepted: {
             $sum: {
               $cond: [
-                { $eq: ["$_id.status", TourStatusEnum.APPROVED] },
-                "$count",
+                { $eq: ['$_id.status', TourStatusEnum.APPROVED] },
+                '$count',
                 0,
               ],
             },
@@ -131,8 +131,8 @@ export class TourService {
           rejected: {
             $sum: {
               $cond: [
-                { $eq: ["$_id.status", TourStatusEnum.REJECTED] },
-                "$count",
+                { $eq: ['$_id.status', TourStatusEnum.REJECTED] },
+                '$count',
                 0,
               ],
             },
@@ -140,8 +140,8 @@ export class TourService {
           pending: {
             $sum: {
               $cond: [
-                { $eq: ["$_id.status", TourStatusEnum.PENDING] },
-                "$count",
+                { $eq: ['$_id.status', TourStatusEnum.PENDING] },
+                '$count',
                 0,
               ],
             },
@@ -150,7 +150,7 @@ export class TourService {
       },
       {
         $project: {
-          month: "$_id",
+          month: '$_id',
           accepted: 1,
           rejected: 1,
           pending: 1,

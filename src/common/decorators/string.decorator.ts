@@ -1,7 +1,7 @@
-import { applyDecorators } from "@nestjs/common";
+import { applyDecorators } from '@nestjs/common';
 
-import { Transform } from "class-transformer";
-import { IsString, IsNotEmpty, MinLength } from "class-validator";
+import { Transform } from 'class-transformer';
+import { IsString, IsNotEmpty, MinLength } from 'class-validator';
 
 interface StringDecoratorOptionsType {
   minLength?: number;
@@ -13,8 +13,8 @@ interface StringDecoratorOptionsType {
 export function String(options: StringDecoratorOptionsType = {}) {
   const {
     minLength = 0,
-    isStringMessage = "This field must be a string",
-    isNotEmptyMessage = "This field is required",
+    isStringMessage = 'This field must be a string',
+    isNotEmptyMessage = 'This field is required',
     minLengthMessage = `This field must be at least ${minLength} characters long`,
   } = options;
 

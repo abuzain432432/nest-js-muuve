@@ -1,12 +1,12 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument } from 'mongoose';
 
 export type ConversationDocument = HydratedDocument<Conversation>;
 
 @Schema({ timestamps: true })
 export class Conversation {
-  @Prop({ type: String, ref: "Message" })
+  @Prop({ type: String, ref: 'Message' })
   lastMessage: string;
 
   @Prop({ default: false })

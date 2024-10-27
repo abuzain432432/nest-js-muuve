@@ -1,6 +1,6 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
 
-import { EmailNotificationService } from "src/modules/email-notification/email-notification.service";
+import { EmailNotificationService } from 'src/modules/email-notification/email-notification.service';
 
 @Module({
   providers: [

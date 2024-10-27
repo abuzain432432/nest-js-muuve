@@ -1,7 +1,7 @@
-import * as Joi from "joi";
+import * as Joi from 'joi';
 
 const envSchema = Joi.object({
-  NODE_ENV: Joi.string().valid("development", "production", "test").required(),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
   MONGODB_URL: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
   COOKIE_SECRET: Joi.string().required(),
@@ -19,7 +19,7 @@ const envSchema = Joi.object({
   MAILOSAUR_EMAIL: Joi.string().optional(),
 });
 export type EnvironmentVariablesType = {
-  NODE_ENV: "development" | "production" | "test";
+  NODE_ENV: 'development' | 'production' | 'test';
   MONGODB_URL: string;
   COOKIE_SECRET: string;
   JWT_SECRET: string;

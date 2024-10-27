@@ -1,14 +1,14 @@
-import { NestFactory } from "@nestjs/core";
-import type { NestExpressApplication } from "@nestjs/platform-express";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
-import * as cookieParser from "cookie-parser";
+import * as cookieParser from 'cookie-parser';
 
-import { AppModule } from "./app.module";
-import { TimeoutInterceptor } from "./common/interceptors/timeout.interceptor";
+import { AppModule } from './app.module';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 // import helmet from 'helmet';
-import { setupGlobalPipes } from "./common/lib/setup-global-pipes.lib";
-import { RedisIoAdapter } from "./modules/ws/adapters/redis.adapter";
+import { setupGlobalPipes } from './common/lib/setup-global-pipes.lib';
+import { RedisIoAdapter } from './modules/ws/adapters/redis.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -26,17 +26,17 @@ async function bootstrap() {
   const redisIoAdapter = new RedisIoAdapter();
   await redisIoAdapter.connectToRedis();
   app.useWebSocketAdapter(redisIoAdapter as any);
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .addBearerAuth()
-    .setTitle("Muuve")
-    .setDescription("The Muuve API docs")
-    .setVersion("1.0")
+    .setTitle('Muuve')
+    .setDescription('The Muuve API docs')
+    .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api/docs", app, document);
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(port);
 }
