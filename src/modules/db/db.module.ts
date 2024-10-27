@@ -9,8 +9,6 @@ import { MongooseModule } from '@nestjs/mongoose';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const dbUlr = configService.get('MONGODB_URL');
-        console.log('+++++++++++++++++++++++++++++++++++++++');
-        console.log(dbUlr);
         return {
           uri: dbUlr,
         };

@@ -59,5 +59,8 @@ jobs:
       - name: Run integration tests
         run: docker-compose -f docker-compose.test.yml exec app npm run test:int
 
+      - name: Run e2e tests
+        run: docker-compose -f docker-compose.test.yml exec app npm run test:api
+
       - name: Tear down Docker containers
         run: docker-compose -f docker-compose.test.yml down
