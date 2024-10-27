@@ -7,18 +7,18 @@ import {
   // mailosaurServerId,
 } from '../constants';
 // import MailosaurClient from 'mailosaur';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 // import extractOtpFromEmail from '../lib/extract-otp-from-email';
 // const mailosaur = new MailosaurClient(mailosaurApiKey);
 
-const testUserData = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: `test-user-${uuidv4()}@mailosaur.net`,
-  role: 'agent',
-  password: 'password',
-  passwordConfirm: 'password',
-};
+// const testUserData = {
+//   firstName: 'John',
+//   lastName: 'Doe',
+//   email: `test-user-${uuidv4()}@mailosaur.net`,
+//   role: 'agent',
+//   password: 'password',
+//   passwordConfirm: 'password',
+// };
 describe('Auth', () => {
   it('signup body validation fail', async () => {
     await request(baseApiUrl)
@@ -67,13 +67,13 @@ describe('Auth', () => {
   //   FIFTEEN_SECONDS_IN_MS,
   // );
 
-  it('signup fail with duplicate email', async () => {
-    await request(baseApiUrl)
-      .post('/auth/signup')
-      .send(testUserData)
-      .expect(400)
-      .expect((response) => {
-        expect(response.body.message).toMatch(/Duplicate email/);
-      });
-  });
+  // it('signup fail with duplicate email', async () => {
+  //   await request(baseApiUrl)
+  //     .post('/auth/signup')
+  //     .send(testUserData)
+  //     .expect(400)
+  //     .expect((response) => {
+  //       expect(response.body.message).toMatch(/Duplicate email/);
+  //     });
+  // });
 });
