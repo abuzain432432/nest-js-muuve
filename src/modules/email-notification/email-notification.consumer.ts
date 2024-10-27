@@ -27,7 +27,9 @@ export class EmailNotificationConsumer extends WorkerHost {
     headers?: any,
   ) {
     const msg = {
-      to: this.configService.get('MAILOSAUR_EMAIL'),
+      // NOTE add check if current environment is not production then send to the mailosaur email address but for now we don't have the mailosaur account
+      // to: this.configService.get('MAILOSAUR_EMAIL'),
+      to,
       from: this.configService.get('SENDER_EMAIL'),
       subject,
       text,
@@ -37,7 +39,7 @@ export class EmailNotificationConsumer extends WorkerHost {
     console.log('++++++++++++++++++++++++++');
     console.log(msg);
 
-    await sgMail.send(msg);
+    // await sgMail.send(msg);
     return { success: true };
   }
   async process(job: Job<any, any, string>) {
