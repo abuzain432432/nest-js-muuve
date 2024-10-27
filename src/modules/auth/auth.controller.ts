@@ -9,16 +9,6 @@ import {
   Param,
   Patch,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignupDto } from './dtos/signup.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { CompleteGoogleProfileDto } from './dtos/complete-google-profile-dto';
-import { BypassProfileCompleteCheck } from 'src/common/decorators/bypass-profile-complete-check.decorator';
-import { IRequest } from 'src/common/types/request.type';
-import { BypassUserActiveCheck } from 'src/common/decorators/bypass-user-active-check.decorator';
-import { RecoverTfaDto } from './dtos/recover-tfa.dto';
 import {
   ApiTags,
   ApiOkResponse,
@@ -28,9 +18,21 @@ import {
   ApiUnauthorizedResponse,
   ApiExcludeEndpoint,
 } from '@nestjs/swagger';
-import { MESSAGES } from 'src/common/messages/index';
-import { LoginSwagger } from './swagger/login.swagger';
+
+import { BypassProfileCompleteCheck } from 'src/common/decorators/bypass-profile-complete-check.decorator';
+import { BypassUserActiveCheck } from 'src/common/decorators/bypass-user-active-check.decorator';
 import { UserResponseDto } from 'src/common/dtos/user-response.dto';
+import { MESSAGES } from 'src/common/messages';
+import { IRequest } from 'src/common/types/request.type';
+
+import { AuthService } from './auth.service';
+import { CompleteGoogleProfileDto } from './dtos/complete-google-profile-dto';
+import { RecoverTfaDto } from './dtos/recover-tfa.dto';
+import { SignupDto } from './dtos/signup.dto';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LoginSwagger } from './swagger/login.swagger';
 
 @ApiTags('Auth')
 @Controller('auth')

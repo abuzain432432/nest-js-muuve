@@ -1,21 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/modules/user/user.service';
-import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
-import { MESSAGES } from 'src/common/messages/index';
+import * as crypto from 'crypto';
+
 import { BadRequestException } from '@nestjs/common';
-import * as speakeasy from 'speakeasy';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
 import * as qrcode from 'qrcode';
-import { createHashVerifier } from 'src/common/lib/en-decryption.lib';
-import { SignupDto } from './dtos/signup.dto';
-import { EmailNotificationService } from '../email-notification/email-notification.service';
+import * as speakeasy from 'speakeasy';
 import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
 import { RolesEnum } from 'src/common/enums/roles.enum';
-import * as crypto from 'crypto';
+import { createHashVerifier } from 'src/common/lib/en-decryption.lib';
 import * as enDecryptionLib from 'src/common/lib/en-decryption.lib';
-import UserService__mock__ from 'src/modules/user/__mock__/user.service__mock__';
+import { MESSAGES } from 'src/common/messages';
 import { userFixtures } from 'src/modules/user/__fixtures__/user.fixture';
+import UserService__mock__ from 'src/modules/user/__mock__/user.service__mock__';
+import { UserService } from 'src/modules/user/user.service';
+
+import { EmailNotificationService } from '../email-notification/email-notification.service';
+
+import { AuthService } from './auth.service';
+import { SignupDto } from './dtos/signup.dto';
+
 const MOCK_TOKEN = 'mock-token';
 const MOCK_OTP = 'mock-otp';
 const INVALID_MOCK_OTP = 'invalid-otp';

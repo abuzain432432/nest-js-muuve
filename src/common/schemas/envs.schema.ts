@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+
 const envSchema = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
   MONGODB_URL: Joi.string().required(),

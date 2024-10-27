@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-import { AxiosResponse, AxiosError, isAxiosError } from 'axios';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+
+import { AxiosResponse, AxiosError, isAxiosError } from 'axios';
+import { firstValueFrom } from 'rxjs';
 import { EmailTemplateIdsEnum } from 'src/common/enums/email-template-ids.enum';
 import { ConfigService } from 'src/modules/config/config.service';
 

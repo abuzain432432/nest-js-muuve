@@ -1,18 +1,20 @@
 import { Controller, Get, Param, UsePipes, UseGuards } from '@nestjs/common';
-import { UserService } from './user.service';
-import { IsMongoIdPipe } from 'src/common/pipes/monogo-id.pipe';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-
 import {
   ApiTags,
   ApiBearerAuth,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
+
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesEnum } from 'src/common/enums/roles.enum';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 import { MESSAGES } from 'src/common/messages';
+import { IsMongoIdPipe } from 'src/common/pipes/monogo-id.pipe';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+
+import { UserService } from './user.service';
+
 @ApiTags('Users')
 @Controller('users')
 export class UserController {

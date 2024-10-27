@@ -1,5 +1,6 @@
-import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
+import mongoose, { HydratedDocument } from 'mongoose';
 import { PropertyStatusEnum } from 'src/modules/property/enums/property-status.enum';
 import { PropertyTypeEnum } from 'src/modules/property/enums/property-type-enum';
 

@@ -1,5 +1,6 @@
-import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
+import mongoose, { HydratedDocument } from 'mongoose';
 import { TourStatusEnum } from 'src/modules/tour/enums/tour-status.enum';
 
 export type TourDocument = HydratedDocument<Tour>;

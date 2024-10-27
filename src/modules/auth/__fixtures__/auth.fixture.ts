@@ -1,5 +1,7 @@
 import { RolesEnum } from 'src/common/enums/roles.enum';
+
 import { SignupDto } from '../dtos/signup.dto';
+
 const baseSignupUser = {
   email: 'dummy@gmail.com',
   password: 'password',

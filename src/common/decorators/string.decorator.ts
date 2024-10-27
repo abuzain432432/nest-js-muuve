@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
-import { IsString, IsNotEmpty, MinLength } from 'class-validator';
+
 import { Transform } from 'class-transformer';
+import { IsString, IsNotEmpty, MinLength } from 'class-validator';
 
 interface StringDecoratorOptionsType {
   minLength?: number;

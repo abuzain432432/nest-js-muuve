@@ -1,11 +1,14 @@
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+
+import { MESSAGES } from 'src/common/messages';
+import mockAuthService from 'src/modules/auth/__mock__/auth.service';
+
+import { signupFixtures } from './__fixtures__/auth.fixture';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dtos/signup.dto';
-import { MESSAGES } from 'src/common/messages/index';
-import mockAuthService from 'src/modules/auth/__mock__/auth.service';
-import { signupFixtures } from './__fixtures__/auth.fixture';
-import { BadRequestException } from '@nestjs/common';
+
 describe('AuthController', () => {
   let authController: AuthController;
   let authService: AuthService;

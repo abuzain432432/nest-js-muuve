@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom';
+
 function extractOtpFromEmail(email: any, userEmail: string) {
   // NOTE check if email belongs to the user
   if (!email.subject.includes(userEmail)) {

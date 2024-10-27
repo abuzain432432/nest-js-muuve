@@ -1,5 +1,7 @@
 import { Expose } from 'class-transformer';
+
 import { TourStatusEnum } from '../enums/tour-status.enum';
+
 export class GetTourResponseDto {
   @Expose()
   readonly _id: string;

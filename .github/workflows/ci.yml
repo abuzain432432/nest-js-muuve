@@ -51,7 +51,7 @@ jobs:
       - name: Run lint and format
         run: |
           docker-compose -f docker-compose.test.yml exec app npm run lint
-          docker-compose -f docker-compose.test.yml exec app npm run format
+          docker-compose -f docker-compose.test.yml exec app npm run format:check
 
       - name: Run unit tests
         run: docker-compose -f docker-compose.test.yml exec app npm run test:unit

@@ -3,20 +3,23 @@ import {
   UnauthorizedException,
   BadRequestException,
 } from '@nestjs/common';
-import { Tour, TourDocument } from './schemas/tour.schema';
-import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateTourDto } from './dtos/create-tour.dto';
-import { IUser } from 'src/common/types/user.type';
-import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
-import { GetTourResponseDto } from './dtos/get-tour-response.dto';
-import { TourStatusEnum } from './enums/tour-status.enum';
-import { MESSAGES } from 'src/common/messages/index';
+
 import { plainToInstance } from 'class-transformer';
+import { Model } from 'mongoose';
 import { RolesEnum } from 'src/common/enums/roles.enum';
+import { dateRanges } from 'src/common/lib/date-ranges';
+import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
+import { MESSAGES } from 'src/common/messages';
+import { IUser } from 'src/common/types/user.type';
+
+import { CreateTourDto } from './dtos/create-tour.dto';
+import { GetTourResponseDto } from './dtos/get-tour-response.dto';
 import { GetToursResponseDto } from './dtos/get-tours-response.dto';
 import { TourStatsResponseDto } from './dtos/tour-stats-response.dto';
-import { dateRanges } from 'src/common/lib/date-ranges';
+import { TourStatusEnum } from './enums/tour-status.enum';
+import { Tour, TourDocument } from './schemas/tour.schema';
+
 @Injectable()
 export class TourService {
   constructor(

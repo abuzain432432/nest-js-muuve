@@ -1,9 +1,11 @@
 import { Injectable, OnModuleInit, Inject } from '@nestjs/common';
+
 import { RedisClientType } from 'redis';
 import { Server } from 'socket.io';
 import { CreateMessageDto } from 'src/modules/message/dtos/create.dto';
 import { MessageService } from 'src/modules/message/message.service';
 import { Message } from 'src/modules/message/schemas/message.schema';
+
 import { RedisIoAdapter } from './adapters/redis.adapter';
 import { TypingEventDto } from './dtos/typing-event.dto';
 

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as NextConfigService } from '@nestjs/config';
-import { EnvironmentVariablesType } from 'src/common/schemas/envs.schema';
+
 import {
   FIVE_MINUTES_IN_MILLISECONDS,
   FIVER_SECONDS_IN_MILLISECONDS,
   ONE_THOUSAND_JOBS,
   QUEUE_JOBS_ATTEMPTS_In_CASE_OF_FAILURE,
 } from 'src/common/constants';
+import { EnvironmentVariablesType } from 'src/common/schemas/envs.schema';
 
 @Injectable()
 export class ConfigService {

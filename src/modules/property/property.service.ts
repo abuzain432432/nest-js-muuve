@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+
 import { Model } from 'mongoose';
-import { Property, PropertyDocument } from './schemas/property.schema';
-import { CreatePropertyDto } from './dtos/create-property.dto';
-import { PropertyStatusEnum } from './enums/property-status.enum';
-import { IUser } from 'src/common/types/user.type';
-import { PropertyStatsResponseDto } from './dtos/property-stats-response.dto';
 import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
+import { IUser } from 'src/common/types/user.type';
+
+import { CreatePropertyDto } from './dtos/create-property.dto';
+import { PropertyStatsResponseDto } from './dtos/property-stats-response.dto';
+import { PropertyStatusEnum } from './enums/property-status.enum';
+import { Property, PropertyDocument } from './schemas/property.schema';
 
 @Injectable()
 export class PropertyService {

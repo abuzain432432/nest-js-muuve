@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
-import { IsNumber, IsArray, ValidateNested, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsNumber, IsArray, ValidateNested, IsNotEmpty } from 'class-validator';
 
 class Stats {
   @IsNumber()

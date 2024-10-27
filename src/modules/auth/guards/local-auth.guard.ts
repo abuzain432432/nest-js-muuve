@@ -5,8 +5,9 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from 'src/modules/auth/auth.service';
+
 import { IRequest } from 'src/common/types/request.type';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {

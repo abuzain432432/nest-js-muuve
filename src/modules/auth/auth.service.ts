@@ -1,28 +1,32 @@
+import * as crypto from 'crypto';
+
 import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
-import * as crypto from 'crypto';
-import { Request } from 'express';
-import { SignupDto } from './dtos/signup.dto';
-import { CompleteGoogleProfileDto } from './dtos/complete-google-profile-dto';
-import { UserService } from 'src/modules/user/user.service';
-import { ConfigService } from 'src/modules/config/config.service';
-import { AuthPayloadType } from 'src/common/types/auth.types';
-import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
-import { EmailNotificationService } from 'src/modules/email-notification/email-notification.service';
-import * as speakeasy from 'speakeasy';
-import * as qrcode from 'qrcode';
-import { IUser } from 'src/common/types/user.type';
-import { MESSAGES } from 'src/common/messages/index';
-import { createHashVerifier } from 'src/common/lib/en-decryption.lib';
-import { v4 as uuidv4 } from 'uuid';
+
 import { plainToInstance } from 'class-transformer';
+import { Response } from 'express';
+import { Request } from 'express';
+import * as qrcode from 'qrcode';
+import * as speakeasy from 'speakeasy';
 import { UserResponseDto } from 'src/common/dtos/user-response.dto';
+import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
+import { createHashVerifier } from 'src/common/lib/en-decryption.lib';
 import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
+import { MESSAGES } from 'src/common/messages';
+import { AuthPayloadType } from 'src/common/types/auth.types';
+import { IUser } from 'src/common/types/user.type';
+import { ConfigService } from 'src/modules/config/config.service';
+import { EmailNotificationService } from 'src/modules/email-notification/email-notification.service';
+import { UserService } from 'src/modules/user/user.service';
+import { v4 as uuidv4 } from 'uuid';
+
+import { CompleteGoogleProfileDto } from './dtos/complete-google-profile-dto';
+import { SignupDto } from './dtos/signup.dto';
+
 @Injectable()
 export class AuthService {
   constructor(

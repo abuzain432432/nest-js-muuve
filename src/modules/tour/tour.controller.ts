@@ -7,13 +7,6 @@ import {
   Body,
   Post,
 } from '@nestjs/common';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { TourService } from './tour.service';
-import { IRequest } from 'src/common/types/request.type';
-import { CreateTourDto } from './dtos/create-tour.dto';
 import {
   ApiTags,
   ApiUnauthorizedResponse,
@@ -21,7 +14,15 @@ import {
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
 
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesEnum } from 'src/common/enums/roles.enum';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 import { MESSAGES } from 'src/common/messages';
+import { IRequest } from 'src/common/types/request.type';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+
+import { CreateTourDto } from './dtos/create-tour.dto';
+import { TourService } from './tour.service';
 
 @ApiTags('Tours')
 @Controller('tours')

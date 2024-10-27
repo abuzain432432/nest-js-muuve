@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { Property } from 'src/modules/property/schemas/property.schema';
+
 export class UserResponseDto {
   @Expose()
   readonly _id: string;

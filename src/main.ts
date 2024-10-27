@@ -1,12 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
-import * as cookieParser from 'cookie-parser';
-// import helmet from 'helmet';
-import { RedisIoAdapter } from './modules/ws/adapters/redis.adapter';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
+import * as cookieParser from 'cookie-parser';
+
+import { AppModule } from './app.module';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
+// import helmet from 'helmet';
 import { setupGlobalPipes } from './common/lib/setup-global-pipes.lib';
+import { RedisIoAdapter } from './modules/ws/adapters/redis.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {

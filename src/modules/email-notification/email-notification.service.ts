@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
+import { Injectable } from '@nestjs/common';
+
+import { Queue } from 'bullmq';
 import {
   ACTIVATE_ACCOUNT_QUEUE_JOB_NAME,
   EMAIL_NOTIFICATION_QUEUE_NAME,
 } from 'src/common/constants';
-import { ValidationService } from 'src/modules/validation/validation.service';
 import { ActivateAccountEmailDto } from 'src/common/dtos/activateAccountEmail.dto';
+import { ValidationService } from 'src/modules/validation/validation.service';
 
 @Injectable()
 export class EmailNotificationService {

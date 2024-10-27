@@ -1,23 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
   HttpStatus,
   INestApplication,
 } from '@nestjs/common';
-import * as request from 'supertest';
-import { AuthModule } from 'src/modules/auth/auth.module';
-import { UserService } from 'src/modules/user/user.service';
-import { ConfigModule } from 'src/modules/config/config.module';
-import { MESSAGES } from 'src/common/messages';
-import { UsersModule } from 'src/modules/user/user.module';
 import { getModelToken } from '@nestjs/mongoose';
-import { User } from 'src/modules/user/schemas/user.schema';
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { setupGlobalPipes } from 'src/common/lib/setup-global-pipes.lib';
+import { MESSAGES } from 'src/common/messages';
+import { signupFixtures } from 'src/modules/auth/__fixtures__/auth.fixture';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { ConfigModule } from 'src/modules/config/config.module';
 import EmailNotificationModule__Mock__ from 'src/modules/email-notification/__mock__/email-notification.module__mock__';
 import { EmailNotificationModule } from 'src/modules/email-notification/email-notification.module';
-import { setupGlobalPipes } from 'src/common/lib/setup-global-pipes.lib';
 import UserService__mock__ from 'src/modules/user/__mock__/user.service__mock__';
+import { User } from 'src/modules/user/schemas/user.schema';
+import { UsersModule } from 'src/modules/user/user.module';
+import { UserService } from 'src/modules/user/user.service';
+import * as request from 'supertest';
 
-import { signupFixtures } from 'src/modules/auth/__fixtures__/auth.fixture';
 class MockedUserModel {
   constructor(private _: any) {}
 }

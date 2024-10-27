@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PropertyService } from '../property/property.service';
-import { IUser } from 'src/common/types/user.type';
-import { TourService } from '../tour/tour.service';
-import { StatsResponseDto } from './dtos/stats-response.dto';
+
 import { transformToDto } from 'src/common/lib/transform-to-dto.lib';
+import { IUser } from 'src/common/types/user.type';
+
+import { PropertyService } from '../property/property.service';
+import { TourService } from '../tour/tour.service';
+
+import { StatsResponseDto } from './dtos/stats-response.dto';
 
 @Injectable()
 export class StatsService {

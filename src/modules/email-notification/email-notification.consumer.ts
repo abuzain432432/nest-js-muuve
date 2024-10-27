@@ -1,13 +1,15 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
+
+import * as sgMail from '@sendgrid/mail';
+import { Job } from 'bullmq';
 import {
   ACTIVATE_ACCOUNT_QUEUE_JOB_NAME,
   EMAIL_NOTIFICATION_QUEUE_NAME,
 } from 'src/common/constants';
-import { Job } from 'bullmq';
+import { ActivateAccountEmailDto } from 'src/common/dtos/activateAccountEmail.dto';
 import { EmailService } from 'src/modules/email/email.service';
 // import { EmailTemplateIdsEnum } from 'src/common/enums/email-template-ids.enum';
-import { ActivateAccountEmailDto } from 'src/common/dtos/activateAccountEmail.dto';
-import * as sgMail from '@sendgrid/mail';
+
 import { ConfigService } from '../config/config.service';
 
 @Processor(EMAIL_NOTIFICATION_QUEUE_NAME)

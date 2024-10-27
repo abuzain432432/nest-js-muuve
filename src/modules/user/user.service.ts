@@ -1,8 +1,10 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './schemas/user.schema';
+
 import { Model, SaveOptions } from 'mongoose';
 import { MESSAGES } from 'src/common/messages';
+
+import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {

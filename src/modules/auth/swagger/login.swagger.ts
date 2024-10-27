@@ -1,10 +1,11 @@
+import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
   ApiOkResponse,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
-import { applyDecorators } from '@nestjs/common';
+
 import { UserResponseDto } from 'src/common/dtos/user-response.dto';
 
 export function LoginSwagger() {

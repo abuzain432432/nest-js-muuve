@@ -5,10 +5,11 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { RolesEnum } from 'src/common/enums/roles.enum';
+
 import { HasActiveSubscription } from 'src/common/decorators/has-active-subscription.decorator';
-import { IUser } from 'src/common/types/user.type';
+import { RolesEnum } from 'src/common/enums/roles.enum';
 import { IRequest } from 'src/common/types/request.type';
+import { IUser } from 'src/common/types/user.type';
 
 @Injectable()
 export class ActiveSubscriptionGuard implements CanActivate {

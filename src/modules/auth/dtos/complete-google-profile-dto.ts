@@ -1,7 +1,6 @@
 import { IsEnum } from 'class-validator';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-
 import { ExcludeRole } from 'src/common/decorators/exclude-role.decorator';
+import { RolesEnum } from 'src/common/enums/roles.enum';
 
 export class CompleteGoogleProfileDto {
   @IsEnum(RolesEnum, { message: 'Invalid role provided' })

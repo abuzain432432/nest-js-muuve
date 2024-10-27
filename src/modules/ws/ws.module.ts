@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
+
 import { AuthModule } from 'src/modules/auth/auth.module';
-import { MessageModule } from 'src/modules/message/message.module';
 import { ConversationModule } from 'src/modules/conversation/conversation.module';
-import { WSService } from './ws.service';
-import { WSGateway } from './ws.gateway';
+import { MessageModule } from 'src/modules/message/message.module';
+
 import { RedisIoAdapter } from './adapters/redis.adapter';
+import { WSGateway } from './ws.gateway';
+import { WSService } from './ws.service';
 
 @Module({
   providers: [RedisIoAdapter, WSGateway, WSService],

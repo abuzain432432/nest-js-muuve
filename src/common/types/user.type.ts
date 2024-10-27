@@ -1,6 +1,6 @@
+import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
 import { RolesEnum } from 'src/common/enums/roles.enum';
 import { Property } from 'src/modules/property/schemas/property.schema';
-import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
 
 export interface IUser {
   _id?: string;

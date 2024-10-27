@@ -1,8 +1,9 @@
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { ServerOptions } from 'socket.io';
+
 import { createAdapter } from '@socket.io/redis-adapter';
 import { createClient, RedisClientType } from 'redis';
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { ServerOptions } from 'socket.io';
 
 @Injectable()
 export class RedisIoAdapter

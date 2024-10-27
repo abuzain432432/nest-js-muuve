@@ -1,13 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
 import { HydratedDocument, Types } from 'mongoose';
+import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
+import { RolesEnum } from 'src/common/enums/roles.enum';
 import { Property } from 'src/modules/property/schemas/property.schema';
-import { userSchemaMiddleware } from 'src/modules/user/schemas-middleware/user.schema-middleware';
 import {
   addUserMethods,
   UserMethodsType,
 } from 'src/modules/user/schemas-methods/user.schema-methods';
-import { RolesEnum } from 'src/common/enums/roles.enum';
-import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
+import { userSchemaMiddleware } from 'src/modules/user/schemas-middleware/user.schema-middleware';
 
 export type UserDocument = HydratedDocument<User> & UserMethodsType;
 

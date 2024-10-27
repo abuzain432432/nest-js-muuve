@@ -1,7 +1,9 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { MessageService } from './message.service';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+
+import { MessageService } from './message.service';
 
 @ApiTags('Messages')
 @Controller('messages')

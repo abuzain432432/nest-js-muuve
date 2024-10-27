@@ -1,4 +1,10 @@
 import {
+  UsePipes,
+  ValidationPipe,
+  UseFilters,
+  BadRequestException,
+} from '@nestjs/common';
+import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
@@ -8,21 +14,18 @@ import {
   OnGatewayDisconnect,
   ConnectedSocket,
 } from '@nestjs/websockets';
+
 import { Server, Socket } from 'socket.io';
+import { WsCatchAllExceptionsFilter } from 'src/common/ws-exception-filters/catch-all.exception-filter';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { CreateMessageDto } from 'src/modules/message/dtos/create.dto';
+
+import { RedisIoAdapter } from './adapters/redis.adapter';
+import { TypingEventDto } from './dtos/typing-event.dto';
+import { AuthWsMiddleware } from './middlewares/ws-auth.middleware';
 import { AuthenticatedSocket } from './types/socket-io.types';
 import { WSService } from './ws.service';
-import { RedisIoAdapter } from './adapters/redis.adapter';
-import { AuthWsMiddleware } from './middlewares/ws-auth.middleware';
-import {
-  UsePipes,
-  ValidationPipe,
-  UseFilters,
-  BadRequestException,
-} from '@nestjs/common';
-import { WsCatchAllExceptionsFilter } from 'src/common/ws-exception-filters/catch-all.exception-filter';
-import { TypingEventDto } from './dtos/typing-event.dto';
+
 @UseFilters(WsCatchAllExceptionsFilter)
 @UsePipes(
   new ValidationPipe({

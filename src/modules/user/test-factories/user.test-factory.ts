@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+
 import { Model } from 'mongoose';
-import { User } from '../schemas/user.schema';
-import { RolesEnum } from 'src/common/enums/roles.enum';
 import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
+import { RolesEnum } from 'src/common/enums/roles.enum';
 import { v4 as uuidv4 } from 'uuid';
+
+import { User } from '../schemas/user.schema';
+
 const baseUser = {
   firstName: 'John',
   lastName: 'Doe',

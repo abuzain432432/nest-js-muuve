@@ -1,11 +1,12 @@
 import { Injectable, ExecutionContext } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+
+import { BypassProfileCompleteCheck } from 'src/common/decorators/bypass-profile-complete-check.decorator';
+import { BypassUserActiveCheck } from 'src/common/decorators/bypass-user-active-check.decorator';
 import { AuthProvidersEnum } from 'src/common/enums/auth-providers.enum';
 import { IncompleteProfileException } from 'src/common/exceptions/incomplete-profile.exception';
-import { Reflector } from '@nestjs/core';
-import { BypassProfileCompleteCheck } from 'src/common/decorators/bypass-profile-complete-check.decorator';
 import { IRequest } from 'src/common/types/request.type';
-import { BypassUserActiveCheck } from 'src/common/decorators/bypass-user-active-check.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

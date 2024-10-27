@@ -1,12 +1,15 @@
-import Stripe from 'stripe';
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { ConfigService } from 'src/modules/config/config.service';
-import { CreateSubscriptionSessionDto } from './dtos/create-subscription-session.dto';
+
 import { IUser } from 'src/common/types/user.type';
-import { UserService } from '../user/user.service';
-import { CreateListingFeeCheckoutDto } from './dtos/create-listing-fee-checkout.dto';
-import { PropertyService } from '../property/property.service';
+import { ConfigService } from 'src/modules/config/config.service';
+import Stripe from 'stripe';
+
 import { PropertyStatusEnum } from '../property/enums/property-status.enum';
+import { PropertyService } from '../property/property.service';
+import { UserService } from '../user/user.service';
+
+import { CreateListingFeeCheckoutDto } from './dtos/create-listing-fee-checkout.dto';
+import { CreateSubscriptionSessionDto } from './dtos/create-subscription-session.dto';
 
 @Injectable()
 export default class PaymentService {

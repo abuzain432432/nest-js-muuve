@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -12,7 +13,6 @@ import {
   ArrayMinSize,
   ArrayMaxSize,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { PropertyTypeEnum } from 'src/modules/property/enums/property-type-enum';
 
 class ScheduleTimeDto {

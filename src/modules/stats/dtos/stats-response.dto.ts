@@ -1,7 +1,7 @@
+import { Type, Expose } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
 import { PropertyStatsResponseDto } from 'src/modules/property/dtos/property-stats-response.dto';
 import { TourStatsResponseDto } from 'src/modules/tour/dtos/tour-stats-response.dto';
-import { ValidateNested } from 'class-validator';
-import { Type, Expose } from 'class-transformer';
 
 export class StatsResponseDto {
   @ValidateNested()
